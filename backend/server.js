@@ -401,7 +401,8 @@ app.post('/api/listings', authMiddleware, upload.array('images', 10), async (req
       location
     } = req.body;
 
-    const images = req.files ? req.files.map(file => /uploads/${file.filename}) : [];
+    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+
 
     const listing = new Listing({
       title,
@@ -853,9 +854,10 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   await createDefaultAdmin();
-  console.log(🚀 Cranevo Server running on port ${PORT});
-  console.log(🌍 Environment: ${process.env.NODE_ENV || 'development'});
-  console.log(🗄 MongoDB: ${MONGODB_URI});
-  console.log(👤 Default admin: admin@cranevo.com / admin123);
-  console.log(✅ Health check: http://localhost:${PORT}/api/health);
+  console.log(`🚀 Cranevo Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🗄 MongoDB: ${MONGODB_URI}`);
+  console.log(`👤 Default admin: admin@cranevo.com / admin123`);
+  console.log(`✅ Health check: http://localhost:${PORT}/api/health`);
 });
+
