@@ -24,6 +24,9 @@ app.use('/uploads', express.static('uploads'));
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/cranevo';
 mongoose.connect(MONGODB_URI);
 
+// Serve frontend files
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 mongoose.connection.on('connected', () => {
   console.log('✅ Connected to MongoDB successfully');
 });
