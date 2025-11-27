@@ -10,20 +10,11 @@ require('dotenv').config();
 
 const app = express();
 
-console.log('=== ENVIRONMENT CHECK ===');
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
-console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'Set' : 'NOT SET');
-console.log('PORT:', process.env.PORT);
-
 // Middleware - Updated CORS for production
 app.use(cors({
-  origin: [
-    'https://cranevo-marketplace.onrender.com', // Your frontend URL
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:5000'
-  ],
+  origin: process.env.NODE_ENV === 'production' 
+    ? true  // Allow all origins in production (you can restrict this later)
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5000'],
   credentials: true
 }));
 app.use(express.json());
@@ -405,7 +396,6 @@ app.post('/api/listings', authMiddleware, upload.array('images', 10), async (req
     } = req.body;
 
     const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
-
 
     const listing = new Listing({
       title,
@@ -845,7 +835,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend')));
@@ -860,8 +849,7 @@ app.listen(PORT, async () => {
   await createDefaultAdmin();
   console.log(`🚀 Cranevo Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🗄 MongoDB: ${MONGODB_URI}`);
+  console.log(`🗄️ MongoDB: ${MONGODB_URI}`);
   console.log(`👤 Default admin: admin@cranevo.com / admin123`);
   console.log(`✅ Health check: http://localhost:${PORT}/api/health`);
 });
-
