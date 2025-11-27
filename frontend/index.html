@@ -2402,23 +2402,19 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 this.loadListings();
             }
             
-           async loadListings() {
+          async loadListings() {
     try {
         const categoryFilter = document.getElementById('categoryFilter').value;
         const statusFilter = document.getElementById('statusFilter').value;
         
-        // For PUBLIC view, only show APPROVED listings by default
-        let endpoint = '/listings?status=approved'; // ALWAYS start with approved
+        // FORCE only approved listings for public view
+        let endpoint = '/listings?status=approved';
         
         if (categoryFilter !== 'all') {
             endpoint += `&category=${categoryFilter}`;
         }
         
-        // Only allow status filter for approved/sold/reserved, not pending
-        if (statusFilter !== 'all' && statusFilter !== 'pending') {
-            endpoint += `&status=${statusFilter}`;
-        }
-        
+        // Ignore any status filter from users - only show approved
         const data = await this.apiCall(endpoint);
         this.renderListings(data.listings, 'listingsGrid');
     } catch (error) {
@@ -2754,19 +2750,27 @@ renderPendingListings(listings) {
 }
 
 // NEW: Approve or reject listing
-async approveListing(listingId, status) {
-  try {
-    const data = await this.apiCall(`/admin/listings/${listingId}/approve`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status })
-    });
-    
-    this.showNotification(`Listing ${status} successfully`, 'success');
-    this.loadPendingListings();
-    this.loadAdminListings(); // Refresh all listings
-  } catch (error) {
-    this.showNotification('Error updating listing: ' + error.message, 'error');
-  }
+async approveListing(listingId, status, rejectionReason = '') {
+    try {
+        const data = await this.apiCall(`/admin/listings/${listingId}/approve`, {
+            method: 'PATCH',
+            body: JSON.stringify({ 
+                status,
+                rejectionReason: rejectionReason || '' 
+            })
+        });
+        
+        if (status === 'approved') {
+            this.showNotification('Listing approved successfully!', 'success');
+        } else {
+            this.showNotification('Listing rejected successfully!', 'success');
+        }
+        
+        this.loadPendingListings();
+        this.loadAdminListings();
+    } catch (error) {
+        this.showNotification('Error updating listing: ' + error.message, 'error');
+    }
 }
 
 // ========== YOUR EXISTING CODE CONTINUES BELOW ==========
@@ -2796,51 +2800,83 @@ async loadPendingListings() {
 
 // NEW: Render pending listings
 renderPendingListings(listings) {
-  const container = document.getElementById('pendingListingsContainer');
-  if (!container) return;
-  
-  if (!listings || listings.length === 0) {
-    container.innerHTML = '<p>No pending listings for review</p>';
-    return;
-  }
-  
-  container.innerHTML = listings.map(listing => `
-    <div class="listing-admin-item pending-listing" data-id="${listing._id}">
-      <div class="listing-admin-header">
-        <div class="listing-admin-meta">
-          <strong>${listing.title}</strong>
-          <span class="listing-price">$${listing.price.toLocaleString()}</span>
-          <span class="listing-status status-pending">Pending Review</span>
+    const container = document.getElementById('pendingListingsContainer');
+    if (!container) return;
+    
+    if (!listings || listings.length === 0) {
+        container.innerHTML = '<p>No pending listings for review</p>';
+        return;
+    }
+    
+    container.innerHTML = listings.map(listing => `
+        <div class="listing-admin-item pending-listing" data-id="${listing._id}">
+            <div class="listing-admin-header">
+                <div class="listing-admin-meta">
+                    <strong>${listing.title}</strong>
+                    <span class="listing-status status-pending">Pending Review</span>
+                </div>
+                <div class="listing-admin-date">Submitted: ${new Date(listing.createdAt).toLocaleDateString()}</div>
+            </div>
+            <div class="listing-details">
+                <p><strong>Category:</strong> ${listing.category}</p>
+                <p><strong>Location:</strong> ${listing.location}</p>
+                <p><strong>Seller:</strong> ${listing.userId.name} (${listing.userId.email})</p>
+                <p><strong>Description:</strong> ${listing.description}</p>
+            </div>
+            <div class="listing-admin-actions">
+                <button class="btn btn-sm btn-success approve-listing" data-id="${listing._id}">
+                    <i class="fas fa-check"></i> Approve
+                </button>
+                <button class="btn btn-sm btn-danger reject-listing" data-id="${listing._id}">
+                    <i class="fas fa-times"></i> Reject
+                </button>
+            </div>
         </div>
-        <div class="listing-admin-date">Submitted: ${new Date(listing.createdAt).toLocaleDateString()}</div>
-      </div>
-      <div class="listing-details">
-        <p><strong>Category:</strong> ${listing.category}</p>
-        <p><strong>Location:</strong> ${listing.location}</p>
-        <p><strong>Seller:</strong> ${listing.userId.name} (${listing.userId.email})</p>
-        <p><strong>Description:</strong> ${listing.description}</p>
-      </div>
-      <div class="listing-admin-actions">
-        <button class="btn btn-sm btn-success approve-listing" data-id="${listing._id}">
-          <i class="fas fa-check"></i> Approve
-        </button>
-        <button class="btn btn-sm btn-danger reject-listing" data-id="${listing._id}">
-          <i class="fas fa-times"></i> Reject
-        </button>
-      </div>
-    </div>
-  `).join('');
-  
-  // Add event listeners
-  container.querySelectorAll('.approve-listing').forEach(btn => {
-    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'approved'));
-  });
-  
-  container.querySelectorAll('.reject-listing').forEach(btn => {
-    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'rejected'));
-  });
+    `).join('');
+    
+    // Add event listeners
+    container.querySelectorAll('.approve-listing').forEach(btn => {
+        btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'approved'));
+    });
+    
+    container.querySelectorAll('.reject-listing').forEach(btn => {
+        btn.addEventListener('click', () => this.showRejectionModal(btn.getAttribute('data-id')));
+    });
 }
 
+showRejectionModal(listingId) {
+    const rejectionContent = `
+        <div class="rejection-modal">
+            <h3><i class="fas fa-times-circle"></i> Reject Listing</h3>
+            <div class="form-group">
+                <label for="rejectionReason">Reason for Rejection (Required):</label>
+                <textarea id="rejectionReason" class="form-control" rows="4" placeholder="Explain why this listing is being rejected and what the seller needs to fix..."></textarea>
+            </div>
+            <div class="rejection-actions">
+                <button class="btn btn-danger" id="confirmReject">Reject Listing</button>
+                <button class="btn btn-outline close-rejection">Cancel</button>
+            </div>
+        </div>
+    `;
+    
+    this.showCustomModal('Reject Listing', rejectionContent);
+    
+    document.getElementById('confirmReject').addEventListener('click', () => {
+        const rejectionReason = document.getElementById('rejectionReason').value.trim();
+        if (!rejectionReason) {
+            this.showNotification('Please provide a reason for rejection', 'error');
+            return;
+        }
+        
+        this.approveListing(listingId, 'rejected', rejectionReason);
+        this.hideModal('customModal');
+    });
+    
+    document.querySelector('.close-rejection').addEventListener('click', () => {
+        this.hideModal('customModal');
+    });
+}
+                
 // NEW: Approve or reject listing
 async approveListing(listingId, status) {
   try {
@@ -3318,6 +3354,7 @@ async approveListing(listingId, status) {
             }
             
          // In your search function, make sure it only searches approved listings
+
 async handleSearch() {
     const query = document.getElementById('globalSearch').value;
     if (!query.trim()) {
@@ -3326,15 +3363,14 @@ async handleSearch() {
     }
     
     try {
-        // Add status=approved to search
+        // Force approved status in search
         const data = await this.apiCall(`/search?q=${encodeURIComponent(query)}&status=approved`);
         this.renderListings(data.listings, 'listingsGrid');
         this.showNotification(`Found ${data.listings.length} results for "${query}"`, 'success');
     } catch (error) {
         this.showNotification('Search error: ' + error.message, 'error');
     }
-}
-            
+}   
             switchTab(tabId) {
                 // Hide all tab contents
                 document.querySelectorAll('.tab-content').forEach(content => {
