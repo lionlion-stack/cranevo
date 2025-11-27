@@ -18,9 +18,12 @@ console.log('PORT:', process.env.PORT);
 
 // Middleware - Updated CORS for production
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? true  // Allow all origins in production (you can restrict this later)
-    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5000'],
+  origin: [
+    'https://cranevo-marketplace.onrender.com', // Your frontend URL
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5000'
+  ],
   credentials: true
 }));
 app.use(express.json());
