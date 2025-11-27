@@ -2405,27 +2405,30 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 this.loadListings();
             }
             
-            async loadListings() {
-                try {
-                    const categoryFilter = document.getElementById('categoryFilter').value;
-                    const statusFilter = document.getElementById('statusFilter').value;
-                    
-                    let endpoint = '/listings?';
-                    if (categoryFilter !== 'all') endpoint += `category=${categoryFilter}&`;
-                    if (statusFilter !== 'all') endpoint += `status=${statusFilter}&`;
-
-                     if (statusFilter === 'all') {
-            endpoint += 'status=approved&';
+           async loadListings() {
+    try {
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+        
+        // For PUBLIC view, only show APPROVED listings by default
+        let endpoint = '/listings?status=approved'; // ALWAYS start with approved
+        
+        if (categoryFilter !== 'all') {
+            endpoint += `&category=${categoryFilter}`;
         }
-                    
-                    const data = await this.apiCall(endpoint);
-                    this.renderListings(data.listings, 'listingsGrid');
-                } catch (error) {
-                    document.getElementById('listingsGrid').innerHTML = 
-                        '<div class="error-message">Error loading listings: ' + error.message + '</div>';
-                }
-            }
-            
+        
+        // Only allow status filter for approved/sold/reserved, not pending
+        if (statusFilter !== 'all' && statusFilter !== 'pending') {
+            endpoint += `&status=${statusFilter}`;
+        }
+        
+        const data = await this.apiCall(endpoint);
+        this.renderListings(data.listings, 'listingsGrid');
+    } catch (error) {
+        document.getElementById('listingsGrid').innerHTML = 
+            '<div class="error-message">Error loading listings: ' + error.message + '</div>';
+    }
+}
             renderListings(listings, containerId) {
                 const container = document.getElementById(containerId);
                 
@@ -3317,21 +3320,23 @@ async approveListing(listingId, status) {
                 `).join('');
             }
             
-            async handleSearch() {
-                const query = document.getElementById('globalSearch').value;
-                if (!query.trim()) {
-                    this.loadListings();
-                    return;
-                }
-                
-                try {
-                    const data = await this.apiCall(`/search?q=${encodeURIComponent(query)}`);
-                    this.renderListings(data.listings, 'listingsGrid');
-                    this.showNotification(`Found ${data.listings.length} results for "${query}"`, 'success');
-                } catch (error) {
-                    this.showNotification('Search error: ' + error.message, 'error');
-                }
-            }
+         // In your search function, make sure it only searches approved listings
+async handleSearch() {
+    const query = document.getElementById('globalSearch').value;
+    if (!query.trim()) {
+        this.loadListings();
+        return;
+    }
+    
+    try {
+        // Add status=approved to search
+        const data = await this.apiCall(`/search?q=${encodeURIComponent(query)}&status=approved`);
+        this.renderListings(data.listings, 'listingsGrid');
+        this.showNotification(`Found ${data.listings.length} results for "${query}"`, 'success');
+    } catch (error) {
+        this.showNotification('Search error: ' + error.message, 'error');
+    }
+}
             
             switchTab(tabId) {
                 // Hide all tab contents
