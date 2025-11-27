@@ -2662,7 +2662,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 this.showModal('dashboardModal');
             }
             
-          async loadDashboard() {
+      async loadDashboard() {
     if (!this.user) return;
     
     try {
@@ -2692,8 +2692,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
 
 
 
-
-            async showAdminDashboard() {
+           async showAdminDashboard() {
                 if (!this.user) return;
                 
                 if (this.user.role === 'admin') {
@@ -2706,27 +2705,27 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
 
             
 async loadAdminDashboard() {
-  try {
-    const data = await this.apiCall('/admin/stats');
-    this.renderAdminStats(data.stats);
-    this.renderRecentActivities(data.recentActivities);
-    
-    // Load pending listings for the dashboard
-    await this.loadPendingListings();
-    
-  } catch (error) {
-    this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
-  }
+    try {
+        const data = await this.apiCall('/admin/stats');
+        this.renderAdminStats(data.stats);
+        this.renderRecentActivities(data.recentActivities);
+        
+        // Load pending listings for the dashboard
+        await this.loadPendingListings();
+        
+    } catch (error) {
+        this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
+    }
 }
- 
-            // NEW: Load pending listings for admin approval
+
+// Load pending listings for admin approval
 async loadPendingListings() {
-  try {
-    const data = await this.apiCall('/admin/pending-listings');
-    this.renderPendingListings(data.listings);
-  } catch (error) {
-    console.error('Error loading pending listings:', error);
-  }
+    try {
+        const data = await this.apiCall('/admin/pending-listings');
+        this.renderPendingListings(data.listings);
+    } catch (error) {
+        console.error('Error loading pending listings:', error);
+    }
 }
 
 // NEW: Render pending listings
