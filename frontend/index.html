@@ -1228,6 +1228,20 @@
             color: var(--gray);
             font-size: 12px;
         }
+
+        .pending-notice {
+    background: #fff3cd;
+    padding: 8px;
+    border-radius: 4px;
+    border-left: 4px solid #ffc107;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: white;
+}
     </style>
 </head>
 <body>
@@ -2275,57 +2289,61 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
             }
             
             async handleAddListing(e) {
-                e.preventDefault();
-                try {
-                    if (!this.user) {
-                        this.showNotification('Please login to add a listing', 'error');
-                        return;
-                    }
-                    
-                    const formData = new FormData();
-                    const formElements = document.getElementById('addListingForm').elements;
-                    
-                    formData.append('title', formElements.listingTitle.value);
-                    formData.append('category', formElements.listingCategory.value);
-                    formData.append('price', formElements.listingPrice.value);
-                    formData.append('description', formElements.listingDescription.value);
-                    formData.append('year', formElements.listingYear.value);
-                    formData.append('hours', formElements.listingHours.value || 0);
-                    formData.append('capacity', formElements.listingCapacity.value || 0);
-                    formData.append('boomLength', formElements.listingBoomLength.value || 0);
-                    formData.append('location', formElements.listingLocation.value);
-                    
-                    const imageFiles = document.getElementById('listingImages').files;
-                    for (let i = 0; i < imageFiles.length; i++) {
-                        formData.append('images', imageFiles[i]);
-                    }
-                    
-                    const response = await fetch(`${API_BASE_URL}/listings`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${this.token}`
-                        },
-                        body: formData
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (!response.ok) {
-                        throw new Error(data.message || 'Failed to create listing');
-                    }
-                    
-                    this.showNotification('Listing added successfully!', 'success');
-                    this.hideModal('addListingModal');
-                    this.resetForm('addListingForm');
-                    this.loadListings();
-                    // Refresh dashboard if open
-                    if (document.getElementById('dashboardModal').style.display === 'flex') {
-                        this.loadDashboard();
-                    }
-                } catch (error) {
-                    this.showNotification(error.message, 'error');
-                }
-            }
+    e.preventDefault();
+    try {
+        if (!this.user) {
+            this.showNotification('Please login to add a listing', 'error');
+            return;
+        }
+        
+        const formData = new FormData();
+        const formElements = document.getElementById('addListingForm').elements;
+        
+        formData.append('title', formElements.listingTitle.value);
+        formData.append('category', formElements.listingCategory.value);
+        formData.append('price', formElements.listingPrice.value);
+        formData.append('description', formElements.listingDescription.value);
+        formData.append('year', formElements.listingYear.value);
+        formData.append('hours', formElements.listingHours.value || 0);
+        formData.append('capacity', formElements.listingCapacity.value || 0);
+        formData.append('boomLength', formElements.listingBoomLength.value || 0);
+        formData.append('location', formElements.listingLocation.value);
+        
+        const imageFiles = document.getElementById('listingImages').files;
+        for (let i = 0; i < imageFiles.length; i++) {
+            formData.append('images', imageFiles[i]);
+        }
+        
+        const response = await fetch(`${API_BASE_URL}/listings`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to create listing');
+        }
+        
+        // UPDATED: Show approval message
+        this.showNotification('Listing submitted successfully! It will be visible after admin approval.', 'success');
+        this.hideModal('addListingModal');
+        this.resetForm('addListingForm');
+        
+        // UPDATED: Don't reload public listings since it's pending
+        // this.loadListings();
+        
+        // Refresh dashboard if open to show the pending listing
+        if (document.getElementById('dashboardModal').style.display === 'flex') {
+            this.loadDashboard();
+        }
+    } catch (error) {
+        this.showNotification(error.message, 'error');
+    }
+}
             
             async handleProfileUpdate(e) {
                 e.preventDefault();
@@ -2395,6 +2413,10 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                     let endpoint = '/listings?';
                     if (categoryFilter !== 'all') endpoint += `category=${categoryFilter}&`;
                     if (statusFilter !== 'all') endpoint += `status=${statusFilter}&`;
+
+                     if (statusFilter === 'all') {
+            endpoint += 'status=approved&';
+        }
                     
                     const data = await this.apiCall(endpoint);
                     this.renderListings(data.listings, 'listingsGrid');
@@ -2421,45 +2443,50 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
             }
             
             createListingCard(listing) {
-                const card = document.createElement('div');
-                card.className = 'listing-card';
-                
-                const statusClass = `status-${listing.status}`;
-                const statusText = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
-                const mainImage = listing.images && listing.images.length > 0 ? 
-                    `https://cranevo-marketplace.onrender.com${listing.images[0]}` : 
-                    'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
-                
-                card.innerHTML = `
-                    <img src="${mainImage}" alt="${listing.title}" class="listing-image">
-                    <div class="listing-details">
-                        <span class="listing-status ${statusClass}">${statusText}</span>
-                        <h3 class="listing-title">${listing.title}</h3>
-                        <div class="listing-price">$${listing.price.toLocaleString()}</div>
-                        <div class="listing-specs">
-                            ${listing.year ? `<span><i class="fas fa-calendar"></i> ${listing.year}</span>` : ''}
-                            ${listing.capacity ? `<span><i class="fas fa-weight-hanging"></i> ${listing.capacity}T</span>` : ''}
-                            ${listing.boomLength ? `<span><i class="fas fa-ruler"></i> ${listing.boomLength}m</span>` : ''}
-                        </div>
-                        <p>${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
-                        <div class="listing-actions">
-                            <button class="btn btn-outline view-details" data-id="${listing._id}">View Details</button>
-                            <button class="btn btn-primary contact-seller" data-id="${listing._id}">Submit Inquiry</button>
-                        </div>
-                    </div>
-                `;
-                
-                // Add event listeners to buttons
-                card.querySelector('.view-details').addEventListener('click', () => {
-                    this.showListingDetails(listing);
-                });
-                
-                card.querySelector('.contact-seller').addEventListener('click', () => {
-                    this.contactSeller(listing);
-                });
-                
-                return card;
-            }
+    const card = document.createElement('div');
+    card.className = 'listing-card';
+    
+    const statusClass = `status-${listing.status}`;
+    const statusText = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
+    const mainImage = listing.images && listing.images.length > 0 ? 
+        `https://cranevo-marketplace.onrender.com${listing.images[0]}` : 
+        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+    
+    card.innerHTML = `
+        <img src="${mainImage}" alt="${listing.title}" class="listing-image">
+        <div class="listing-details">
+            <span class="listing-status ${statusClass}">${statusText}</span>
+            <h3 class="listing-title">${listing.title}</h3>
+            <div class="listing-price">$${listing.price.toLocaleString()}</div>
+            <div class="listing-specs">
+                ${listing.year ? `<span><i class="fas fa-calendar"></i> ${listing.year}</span>` : ''}
+                ${listing.capacity ? `<span><i class="fas fa-weight-hanging"></i> ${listing.capacity}T</span>` : ''}
+                ${listing.boomLength ? `<span><i class="fas fa-ruler"></i> ${listing.boomLength}m</span>` : ''}
+            </div>
+            <p>${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
+            ${listing.status === 'pending' ? '<p class="pending-notice"><i class="fas fa-clock"></i> Waiting for admin approval</p>' : ''}
+            <div class="listing-actions">
+                <button class="btn btn-outline view-details" data-id="${listing._id}">View Details</button>
+                ${listing.status === 'approved' ? `<button class="btn btn-primary contact-seller" data-id="${listing._id}">Submit Inquiry</button>` : '<button class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">Pending Approval</button>'}
+            </div>
+        </div>
+    `;
+    
+    // Add event listeners to buttons
+    card.querySelector('.view-details').addEventListener('click', () => {
+        this.showListingDetails(listing);
+    });
+    
+    // Only add event listener if contact button is enabled
+    const contactBtn = card.querySelector('.contact-seller');
+    if (contactBtn && listing.status === 'approved') {
+        contactBtn.addEventListener('click', () => {
+            this.contactSeller(listing);
+        });
+    }
+    
+    return card;
+}
             
             showListingDetails(listing) {
                 // Create a detailed view modal
