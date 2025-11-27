@@ -57,7 +57,7 @@ const ListingSchema = new mongoose.Schema({
     required: true,
     enum: ['cranes', 'forklifts', 'trucks', 'excavators', 'loaders', 'other']
   },
-  price: { type: Number, default: 0 },
+  price: { type: Number, required: true },
   description: { type: String, required: true },
   year: { type: Number, required: true },
   hours: { type: Number, default: 0 },
@@ -401,12 +401,12 @@ app.post('/api/listings', authMiddleware, upload.array('images', 10), async (req
       location
     } = req.body;
 
-    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+    const images = req.files ? req.files.map(file => /uploads/${file.filename}) : [];
 
     const listing = new Listing({
       title,
       category,
-      price: price ? parseFloat(price) : 0, 
+      price: parseFloat(price),
       description,
       year: parseInt(year),
       hours: hours ? parseInt(hours) : 0,
@@ -853,9 +853,9 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   await createDefaultAdmin();
-  console.log(`🚀 Cranevo Server running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🗄️ MongoDB: ${MONGODB_URI}`);
-  console.log(`👤 Default admin: admin@cranevo.com / admin123`);
-  console.log(`✅ Health check: http://localhost:${PORT}/api/health`);
+  console.log(🚀 Cranevo Server running on port ${PORT});
+  console.log(🌍 Environment: ${process.env.NODE_ENV || 'development'});
+  console.log(🗄 MongoDB: ${MONGODB_URI});
+  console.log(👤 Default admin: admin@cranevo.com / admin123);
+  console.log(✅ Health check: http://localhost:${PORT}/api/health);
 });
