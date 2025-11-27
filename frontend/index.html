@@ -1228,20 +1228,6 @@
             color: var(--gray);
             font-size: 12px;
         }
-
-        .pending-notice {
-    background: #fff3cd;
-    padding: 8px;
-    border-radius: 4px;
-    border-left: 4px solid #ffc107;
-    font-size: 14px;
-    margin: 10px 0;
-}
-
-.status-pending {
-    background-color: #ffc107;
-    color: white;
-}
     </style>
 </head>
 <body>
@@ -1787,7 +1773,10 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-                   
+                    <div class="form-group">
+                        <label for="listingPrice">Price ($)</label>
+                        <input type="number" id="listingPrice" class="form-control" required placeholder="e.g., 185000">
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -1908,7 +1897,10 @@
                                 <input type="tel" id="profilePhone" class="form-control" required>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label for="profileCompany">Company (Optional)</label>
+                            <input type="text" id="profileCompany" class="form-control">
+                        </div>
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
                 </div>
@@ -1917,103 +1909,92 @@
     </div>
 
     <!-- Admin Modal -->
-   <div class="modal" id="adminModal">
-    <div class="modal-content" style="max-width: 1200px;">
-        <div class="modal-header">
-            <h2><i class="fas fa-cog"></i> Admin Dashboard - Cranevo Management</h2>
-            <button class="close-modal">&times;</button>
-        </div>
-        <div class="admin-dashboard">
-            <div class="admin-tabs">
-                <div class="admin-tab active" data-tab="dashboard">Dashboard</div>
-                <div class="admin-tab" data-tab="pending">Pending Listings</div> <!-- ADD THIS LINE -->
-                <div class="admin-tab" data-tab="inquiries">Inquiries</div>
-                <div class="admin-tab" data-tab="users">Users</div>
-                <div class="admin-tab" data-tab="listings">Listings</div>
-                <div class="admin-tab" data-tab="commissions">Commissions</div>
+    <div class="modal" id="adminModal">
+        <div class="modal-content" style="max-width: 1200px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Admin Dashboard - Cranevo Management</h2>
+                <button class="close-modal">&times;</button>
             </div>
-            
-            <!-- Dashboard Tab -->
-            <div class="admin-tab-content active" id="admin-dashboard">
-                <div class="admin-stats">
-                    <div class="stat-card">
-                        <h3 id="totalUsers">0</h3>
-                        <p>Total Users</p>
+            <div class="admin-dashboard">
+                <div class="admin-tabs">
+                    <div class="admin-tab active" data-tab="dashboard">Dashboard</div>
+                    <div class="admin-tab" data-tab="inquiries">Inquiries</div>
+                    <div class="admin-tab" data-tab="users">Users</div>
+                    <div class="admin-tab" data-tab="listings">Listings</div>
+                    <div class="admin-tab" data-tab="commissions">Commissions</div>
+                </div>
+                
+                <!-- Dashboard Tab -->
+                <div class="admin-tab-content active" id="admin-dashboard">
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="totalListings">0</h3>
+                            <p>Total Listings</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="totalInquiries">0</h3>
+                            <p>Total Inquiries</p>
+                        </div>
+                        <div class="stat-card commission">
+                            <h3 id="totalCommission">$0</h3>
+                            <p>Total Commission</p>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3 id="totalListings">0</h3>
-                        <p>Total Listings</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="totalInquiries">0</h3>
-                        <p>Total Inquiries</p>
-                    </div>
-                    <div class="stat-card commission">
-                        <h3 id="totalCommission">$0</h3>
-                        <p>Total Commission</p>
+                    
+                    <div class="recent-activities">
+                        <h3>Recent Activities</h3>
+                        <div id="recentActivities">
+                            <div class="loading">Loading activities...</div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="recent-activities">
-                    <h3>Recent Activities</h3>
-                    <div id="recentActivities">
-                        <div class="loading">Loading activities...</div>
+                <!-- Inquiries Tab -->
+                <div class="admin-tab-content" id="admin-inquiries">
+                    <div class="inquiries-list">
+                        <h3>Manage Inquiries</h3>
+                        <div class="inquiries-container" id="inquiriesContainer">
+                            <div class="loading">Loading inquiries...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- NEW: Pending Listings Tab -->
-            <div class="admin-tab-content" id="admin-pending">
-                <div class="pending-listings">
-                    <h3>Pending Listings for Review</h3>
-                    <div class="pending-listings-container" id="pendingListingsContainer">
-                        <div class="loading">Loading pending listings...</div>
+                
+                <!-- Users Tab -->
+                <div class="admin-tab-content" id="admin-users">
+                    <div class="users-list">
+                        <h3>Manage Users</h3>
+                        <div class="users-container" id="usersContainer">
+                            <div class="loading">Loading users...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Inquiries Tab -->
-            <div class="admin-tab-content" id="admin-inquiries">
-                <div class="inquiries-list">
-                    <h3>Manage Inquiries</h3>
-                    <div class="inquiries-container" id="inquiriesContainer">
-                        <div class="loading">Loading inquiries...</div>
+                
+                <!-- Listings Tab -->
+                <div class="admin-tab-content" id="admin-listings">
+                    <div class="listings-admin">
+                        <h3>Manage Listings</h3>
+                        <div class="listings-admin-container" id="listingsAdminContainer">
+                            <div class="loading">Loading listings...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Users Tab -->
-            <div class="admin-tab-content" id="admin-users">
-                <div class="users-list">
-                    <h3>Manage Users</h3>
-                    <div class="users-container" id="usersContainer">
-                        <div class="loading">Loading users...</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Listings Tab -->
-            <div class="admin-tab-content" id="admin-listings">
-                <div class="listings-admin">
-                    <h3>Manage Listings</h3>
-                    <div class="listings-admin-container" id="listingsAdminContainer">
-                        <div class="loading">Loading listings...</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Commissions Tab -->
-            <div class="admin-tab-content" id="admin-commissions">
-                <div class="commissions-list">
-                    <h3>Commission Tracking</h3>
-                    <div class="commissions-container" id="commissionsContainer">
-                        <div class="loading">Loading commission data...</div>
+                
+                <!-- Commissions Tab -->
+                <div class="admin-tab-content" id="admin-commissions">
+                    <div class="commissions-list">
+                        <h3>Commission Tracking</h3>
+                        <div class="commissions-container" id="commissionsContainer">
+                            <div class="loading">Loading commission data...</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <script>
         // API Configuration
@@ -2021,7 +2002,7 @@
 // For production - uses your deployed backend URL
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
   ? 'http://localhost:5000/api' 
-  : 'https://cranevo-marketplace.onrender.com/api'; // ← CHANGE THIS AFTER DEPLOYMENT
+  : 'https://your-actual-backend-url.railway.app/api'; // ← CHANGE THIS AFTER DEPLOYMENT
 
         // Frontend Application with Real API Calls
         class CranevoApp {
@@ -2286,61 +2267,57 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
             }
             
             async handleAddListing(e) {
-    e.preventDefault();
-    try {
-        if (!this.user) {
-            this.showNotification('Please login to add a listing', 'error');
-            return;
-        }
-        
-        const formData = new FormData();
-        const formElements = document.getElementById('addListingForm').elements;
-        
-        formData.append('title', formElements.listingTitle.value);
-        formData.append('category', formElements.listingCategory.value);
-        
-        formData.append('description', formElements.listingDescription.value);
-        formData.append('year', formElements.listingYear.value);
-        formData.append('hours', formElements.listingHours.value || 0);
-        formData.append('capacity', formElements.listingCapacity.value || 0);
-        formData.append('boomLength', formElements.listingBoomLength.value || 0);
-        formData.append('location', formElements.listingLocation.value);
-        
-        const imageFiles = document.getElementById('listingImages').files;
-        for (let i = 0; i < imageFiles.length; i++) {
-            formData.append('images', imageFiles[i]);
-        }
-        
-        const response = await fetch(`${API_BASE_URL}/listings`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.token}`
-            },
-            body: formData
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(data.message || 'Failed to create listing');
-        }
-        
-        // UPDATED: Show approval message
-        this.showNotification('Listing submitted successfully! It will be visible after admin approval.', 'success');
-        this.hideModal('addListingModal');
-        this.resetForm('addListingForm');
-        
-        // UPDATED: Don't reload public listings since it's pending
-        // this.loadListings();
-        
-        // Refresh dashboard if open to show the pending listing
-        if (document.getElementById('dashboardModal').style.display === 'flex') {
-            this.loadDashboard();
-        }
-    } catch (error) {
-        this.showNotification(error.message, 'error');
-    }
-}
+                e.preventDefault();
+                try {
+                    if (!this.user) {
+                        this.showNotification('Please login to add a listing', 'error');
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    const formElements = document.getElementById('addListingForm').elements;
+                    
+                    formData.append('title', formElements.listingTitle.value);
+                    formData.append('category', formElements.listingCategory.value);
+                    formData.append('price', formElements.listingPrice.value);
+                    formData.append('description', formElements.listingDescription.value);
+                    formData.append('year', formElements.listingYear.value);
+                    formData.append('hours', formElements.listingHours.value || 0);
+                    formData.append('capacity', formElements.listingCapacity.value || 0);
+                    formData.append('boomLength', formElements.listingBoomLength.value || 0);
+                    formData.append('location', formElements.listingLocation.value);
+                    
+                    const imageFiles = document.getElementById('listingImages').files;
+                    for (let i = 0; i < imageFiles.length; i++) {
+                        formData.append('images', imageFiles[i]);
+                    }
+                    
+                    const response = await fetch(`${API_BASE_URL}/listings`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        },
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Failed to create listing');
+                    }
+                    
+                    this.showNotification('Listing added successfully!', 'success');
+                    this.hideModal('addListingModal');
+                    this.resetForm('addListingForm');
+                    this.loadListings();
+                    // Refresh dashboard if open
+                    if (document.getElementById('dashboardModal').style.display === 'flex') {
+                        this.loadDashboard();
+                    }
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                }
+            }
             
             async handleProfileUpdate(e) {
                 e.preventDefault();
@@ -2402,26 +2379,23 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 this.loadListings();
             }
             
-          async loadListings() {
-    try {
-        const categoryFilter = document.getElementById('categoryFilter').value;
-        const statusFilter = document.getElementById('statusFilter').value;
-        
-        // FORCE only approved listings for public view
-        let endpoint = '/listings?status=approved';
-        
-        if (categoryFilter !== 'all') {
-            endpoint += `&category=${categoryFilter}`;
-        }
-        
-        // Ignore any status filter from users - only show approved
-        const data = await this.apiCall(endpoint);
-        this.renderListings(data.listings, 'listingsGrid');
-    } catch (error) {
-        document.getElementById('listingsGrid').innerHTML = 
-            '<div class="error-message">Error loading listings: ' + error.message + '</div>';
-    }
-}
+            async loadListings() {
+                try {
+                    const categoryFilter = document.getElementById('categoryFilter').value;
+                    const statusFilter = document.getElementById('statusFilter').value;
+                    
+                    let endpoint = '/listings?';
+                    if (categoryFilter !== 'all') endpoint += `category=${categoryFilter}&`;
+                    if (statusFilter !== 'all') endpoint += `status=${statusFilter}&`;
+                    
+                    const data = await this.apiCall(endpoint);
+                    this.renderListings(data.listings, 'listingsGrid');
+                } catch (error) {
+                    document.getElementById('listingsGrid').innerHTML = 
+                        '<div class="error-message">Error loading listings: ' + error.message + '</div>';
+                }
+            }
+            
             renderListings(listings, containerId) {
                 const container = document.getElementById(containerId);
                 
@@ -2438,51 +2412,46 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 });
             }
             
-           createListingCard(listing) {
-    const card = document.createElement('div');
-    card.className = 'listing-card';
-    
-    const statusClass = `status-${listing.status}`;
-    const statusText = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
-    const mainImage = listing.images && listing.images.length > 0 ? 
-        `https://cranevo-marketplace.onrender.com${listing.images[0]}` : 
-        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
-    
-    card.innerHTML = `
-        <img src="${mainImage}" alt="${listing.title}" class="listing-image">
-        <div class="listing-details">
-            <span class="listing-status ${statusClass}">${statusText}</span>
-            <h3 class="listing-title">${listing.title}</h3>
-            <!-- REMOVED price display -->
-            <div class="listing-specs">
-                ${listing.year ? `<span><i class="fas fa-calendar"></i> ${listing.year}</span>` : ''}
-                ${listing.capacity ? `<span><i class="fas fa-weight-hanging"></i> ${listing.capacity}T</span>` : ''}
-                ${listing.boomLength ? `<span><i class="fas fa-ruler"></i> ${listing.boomLength}m</span>` : ''}
-            </div>
-            <p>${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
-            ${listing.status === 'pending' ? '<p class="pending-notice"><i class="fas fa-clock"></i> Waiting for admin approval</p>' : ''}
-            <div class="listing-actions">
-                <button class="btn btn-outline view-details" data-id="${listing._id}">View Details</button>
-                ${listing.status === 'approved' ? `<button class="btn btn-primary contact-seller" data-id="${listing._id}">Contact for Pricing</button>` : '<button class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">Pending Approval</button>'}
-            </div>
-        </div>
-    `;
-    
-    // Add event listeners to buttons
-    card.querySelector('.view-details').addEventListener('click', () => {
-        this.showListingDetails(listing);
-    });
-    
-    // Only add event listener if contact button is enabled
-    const contactBtn = card.querySelector('.contact-seller');
-    if (contactBtn && listing.status === 'approved') {
-        contactBtn.addEventListener('click', () => {
-            this.contactSeller(listing);
-        });
-    }
-    
-    return card;
-}
+            createListingCard(listing) {
+                const card = document.createElement('div');
+                card.className = 'listing-card';
+                
+                const statusClass = `status-${listing.status}`;
+                const statusText = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
+                const mainImage = listing.images && listing.images.length > 0 ? 
+                    `http://localhost:5000${listing.images[0]}` : 
+                    'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+                
+                card.innerHTML = `
+                    <img src="${mainImage}" alt="${listing.title}" class="listing-image">
+                    <div class="listing-details">
+                        <span class="listing-status ${statusClass}">${statusText}</span>
+                        <h3 class="listing-title">${listing.title}</h3>
+                        <div class="listing-price">$${listing.price.toLocaleString()}</div>
+                        <div class="listing-specs">
+                            ${listing.year ? `<span><i class="fas fa-calendar"></i> ${listing.year}</span>` : ''}
+                            ${listing.capacity ? `<span><i class="fas fa-weight-hanging"></i> ${listing.capacity}T</span>` : ''}
+                            ${listing.boomLength ? `<span><i class="fas fa-ruler"></i> ${listing.boomLength}m</span>` : ''}
+                        </div>
+                        <p>${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
+                        <div class="listing-actions">
+                            <button class="btn btn-outline view-details" data-id="${listing._id}">View Details</button>
+                            <button class="btn btn-primary contact-seller" data-id="${listing._id}">Submit Inquiry</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners to buttons
+                card.querySelector('.view-details').addEventListener('click', () => {
+                    this.showListingDetails(listing);
+                });
+                
+                card.querySelector('.contact-seller').addEventListener('click', () => {
+                    this.contactSeller(listing);
+                });
+                
+                return card;
+            }
             
             showListingDetails(listing) {
                 // Create a detailed view modal
@@ -2521,7 +2490,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                                 <p><strong>Name:</strong> ${listing.userId.name}</p>
                                 <p><strong>Email:</strong> ${listing.userId.email}</p>
                                 <p><strong>Phone:</strong> ${listing.userId.countryCode} ${listing.userId.phone}</p>
-                               
+                                ${listing.userId.company ? `<p><strong>Company:</strong> ${listing.userId.company}</p>` : ''}
                             </div>
                         </div>
                     </div>
@@ -2552,72 +2521,73 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 }
 
                 // Show inquiry modal instead of contact modal
-                
-  const inquiryContent = `
-    <div class="inquiry-modal">
-      <h3><i class="fas fa-handshake"></i> Submit Inquiry</h3>
-      <div class="inquiry-info">
-        <p><strong>Machine:</strong> ${listing.title}</p>
-        <p><strong>Price:</strong> $${listing.price.toLocaleString()}</p>
-        <p><strong>Seller:</strong> ${listing.userId.name}</p>
-        <div class="commission-notice">
-          <i class="fas fa-info-circle"></i>
-          <span><strong>Note:</strong> Our team will contact you shortly to facilitate the transaction.</span>
-        </div>
-      </div>
-      <div class="inquiry-form">
-        <div class="form-group">
-          <label>Your Message:</label>
-          <textarea class="form-control" id="inquiryMessage" rows="6" placeholder="Tell us about your interest in this machinery. Include any specific requirements, timeline, or questions..."></textarea>
-        </div>
-        <div class="inquiry-process">
-          <h4><i class="fas fa-sync-alt"></i> How It Works:</h4>
-          <ol>
-            <li>You submit this inquiry</li>
-            <li>We contact you within 24 hours</li>
-            <li>We negotiate with the seller on your behalf</li>
-            <li>You pay the listed price directly to the seller</li>
-            <li>We ensure smooth delivery and handle any issues</li>
-          </ol>
-        </div>
-      </div>
-      <div class="inquiry-actions">
-        <button class="btn btn-primary" id="submitInquiry">Submit Inquiry</button>
-        <button class="btn btn-outline close-inquiry">Cancel</button>
-      </div>
-    </div>
-  `;
+                const inquiryContent = `
+                    <div class="inquiry-modal">
+                        <h3><i class="fas fa-handshake"></i> Submit Inquiry</h3>
+                        <div class="inquiry-info">
+                            <p><strong>Machine:</strong> ${listing.title}</p>
+                            <p><strong>Price:</strong> $${listing.price.toLocaleString()}</p>
+                            <p><strong>Seller:</strong> ${listing.userId.name}</p>
+                            <div class="commission-notice">
+                                <i class="fas fa-info-circle"></i>
+                                <span><strong>Note to Buyer:</strong> The seller pays a 5% commission fee to Cranevo upon successful transaction. This does not affect your purchase price.</span>
+                            </div>
+                        </div>
+                        <div class="inquiry-form">
+                            <div class="form-group">
+                                <label>Your Message to Us:</label>
+                                <textarea class="form-control" id="inquiryMessage" rows="6" placeholder="Tell us about your interest in this machinery. Include any specific requirements, timeline, or questions..."></textarea>
+                            </div>
+                            <div class="inquiry-process">
+                                <h4><i class="fas fa-sync-alt"></i> How It Works:</h4>
+                                <ol>
+                                    <li>You submit this inquiry</li>
+                                    <li>We contact you within 24 hours</li>
+                                    <li>We negotiate with the seller on your behalf</li>
+                                    <li>You pay the listed price directly to the seller</li>
+                                    <li>The seller pays us a 5% commission for facilitating the sale</li>
+                                    <li>We ensure smooth delivery and handle any issues</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="inquiry-actions">
+                            <button class="btn btn-primary" id="submitInquiry">Submit Inquiry</button>
+                            <button class="btn btn-outline close-inquiry">Cancel</button>
+                        </div>
+                    </div>
+                `;
 
-  this.showCustomModal('Submit Inquiry', inquiryContent);
+                this.showCustomModal('Submit Inquiry', inquiryContent);
+
                 // Handle inquiry submission
-                 document.getElementById('submitInquiry').addEventListener('click', async () => {
-    const message = document.getElementById('inquiryMessage').value.trim();
-    
-    if (!message) {
-      this.showNotification('Please enter your inquiry message', 'error');
-      return;
-    }
+                document.getElementById('submitInquiry').addEventListener('click', async () => {
+                    const message = document.getElementById('inquiryMessage').value.trim();
+                    
+                    if (!message) {
+                        this.showNotification('Please enter your inquiry message', 'error');
+                        return;
+                    }
 
-    try {
-      const data = await this.apiCall('/inquiries', {
-        method: 'POST',
-        body: JSON.stringify({
-          listingId: listing._id,
-          message: message
-        })
-      });
+                    try {
+                        const data = await this.apiCall('/inquiries', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                listingId: listing._id,
+                                message: message
+                            })
+                        });
 
-      this.showNotification('Inquiry submitted successfully! We will contact you within 24 hours.', 'success');
-      this.hideModal('customModal');
-    } catch (error) {
-      this.showNotification('Error submitting inquiry: ' + error.message, 'error');
-    }
-  });
+                        this.showNotification('Inquiry submitted successfully! We will contact you within 24 hours.', 'success');
+                        this.hideModal('customModal');
+                    } catch (error) {
+                        this.showNotification('Error submitting inquiry: ' + error.message, 'error');
+                    }
+                });
 
-  document.querySelector('.close-inquiry').addEventListener('click', () => {
-    this.hideModal('customModal');
-  });
-}
+                document.querySelector('.close-inquiry').addEventListener('click', () => {
+                    this.hideModal('customModal');
+                });
+            }
             
             showCustomModal(title, content) {
                 // Create or update custom modal
@@ -2662,37 +2632,35 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 this.showModal('dashboardModal');
             }
             
-      async loadDashboard() {
-    if (!this.user) return;
-    
-    try {
-        // Load user info
-        const profileData = await this.apiCall('/profile');
-        const user = profileData.user;
-        
-        document.getElementById('userName').textContent = user.name;
-        document.getElementById('userEmail').textContent = user.email;
-        document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-        
-        // Load profile form
-        document.getElementById('profileName').value = user.name;
-        document.getElementById('profileEmail').value = user.email;
-        document.getElementById('profileCountryCode').value = user.countryCode;
-        document.getElementById('profilePhone').value = user.phone;
-        document.getElementById('profileCompany').value = user.company || '';
-        
-        // Load user's listings
-        const myListingsData = await this.apiCall('/my-listings');
-        this.renderListings(myListingsData.listings, 'myListingsGrid');
-        
-    } catch (error) {
-        this.showNotification('Error loading dashboard: ' + error.message, 'error');
-    }
-}
+            async loadDashboard() {
+                if (!this.user) return;
+                
+                try {
+                    // Load user info
+                    const profileData = await this.apiCall('/profile');
+                    const user = profileData.user;
+                    
+                    document.getElementById('userName').textContent = user.name;
+                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+                    
+                    // Load profile form
+                    document.getElementById('profileName').value = user.name;
+                    document.getElementById('profileEmail').value = user.email;
+                    document.getElementById('profileCountryCode').value = user.countryCode;
+                    document.getElementById('profilePhone').value = user.phone;
+                    document.getElementById('profileCompany').value = user.company || '';
+                    
+                    // Load user's listings
+                    const myListingsData = await this.apiCall('/my-listings');
+                    this.renderListings(myListingsData.listings, 'myListingsGrid');
+                    
+                } catch (error) {
+                    this.showNotification('Error loading dashboard: ' + error.message, 'error');
+                }
+            }
 
-
-
-           async showAdminDashboard() {
+            async showAdminDashboard() {
                 if (!this.user) return;
                 
                 if (this.user.role === 'admin') {
@@ -2703,135 +2671,16 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 }
             }
 
-            
-async loadAdminDashboard() {
-    try {
-        const data = await this.apiCall('/admin/stats');
-        this.renderAdminStats(data.stats);
-        this.renderRecentActivities(data.recentActivities);
-        
-        // Load pending listings for the dashboard
-        await this.loadPendingListings();
-        
-    } catch (error) {
-        this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
-    }
-}
-
-
-// Load pending listings for admin approval
-async loadPendingListings() {
-    try {
-        const data = await this.apiCall('/admin/pending-listings');
-        this.renderPendingListings(data.listings);
-    } catch (error) {
-        console.error('Error loading pending listings:', error);
-    }
-}
-
-// NEW: Render pending listings
-renderPendingListings(listings) {
-  const container = document.getElementById('pendingListingsContainer');
-  if (!container) return;
-  
-  if (!listings || listings.length === 0) {
-    container.innerHTML = '<p>No pending listings for review</p>';
-    return;
-  }
-  
-  container.innerHTML = listings.map(listing => `
-    <div class="listing-admin-item pending-listing" data-id="${listing._id}">
-      <div class="listing-admin-header">
-        <div class="listing-admin-meta">
-          <strong>${listing.title}</strong>
-          <span class="listing-status status-pending">Pending Review</span>
-        </div>
-        <div class="listing-admin-date">Submitted: ${new Date(listing.createdAt).toLocaleDateString()}</div>
-      </div>
-      <div class="listing-details">
-        <p><strong>Category:</strong> ${listing.category}</p>
-        <p><strong>Location:</strong> ${listing.location}</p>
-        <p><strong>Seller:</strong> ${listing.userId.name} (${listing.userId.email})</p>
-        <p><strong>Description:</strong> ${listing.description}</p>
-      </div>
-      <div class="listing-admin-actions">
-        <button class="btn btn-sm btn-success approve-listing" data-id="${listing._id}">
-          <i class="fas fa-check"></i> Approve
-        </button>
-        <button class="btn btn-sm btn-danger reject-listing" data-id="${listing._id}">
-          <i class="fas fa-times"></i> Reject
-        </button>
-      </div>
-    </div>
-  `).join('');
-  
-  // Add event listeners
-  container.querySelectorAll('.approve-listing').forEach(btn => {
-    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'approved'));
-  });
-  
-  container.querySelectorAll('.reject-listing').forEach(btn => {
-    btn.addEventListener('click', () => this.showRejectionModal(btn.getAttribute('data-id')));
-  });
-}
-
-// NEW: Show rejection modal with reason
-showRejectionModal(listingId) {
-  const rejectionContent = `
-    <div class="rejection-modal">
-      <h3><i class="fas fa-times-circle"></i> Reject Listing</h3>
-      <div class="form-group">
-        <label for="rejectionReason">Reason for Rejection (Required):</label>
-        <textarea id="rejectionReason" class="form-control" rows="4" placeholder="Explain why this listing is being rejected and what the seller needs to fix..."></textarea>
-      </div>
-      <div class="rejection-actions">
-        <button class="btn btn-danger" id="confirmReject">Reject Listing</button>
-        <button class="btn btn-outline close-rejection">Cancel</button>
-      </div>
-    </div>
-  `;
-  
-  this.showCustomModal('Reject Listing', rejectionContent);
-  
-  document.getElementById('confirmReject').addEventListener('click', () => {
-    const rejectionReason = document.getElementById('rejectionReason').value.trim();
-    if (!rejectionReason) {
-      this.showNotification('Please provide a reason for rejection', 'error');
-      return;
-    }
-    
-    this.approveListing(listingId, 'rejected', rejectionReason);
-    this.hideModal('customModal');
-  });
-  
-  document.querySelector('.close-rejection').addEventListener('click', () => {
-    this.hideModal('customModal');
-  });
-}
-
-// NEW: Approve or reject listing
-async approveListing(listingId, status, rejectionReason = '') {
-  try {
-    const data = await this.apiCall(`/admin/listings/${listingId}/approve`, {
-      method: 'PATCH',
-      body: JSON.stringify({ 
-        status,
-        rejectionReason: rejectionReason || '' 
-      })
-    });
-    
-    if (status === 'approved') {
-      this.showNotification('Listing approved successfully!', 'success');
-    } else {
-      this.showNotification('Listing rejected successfully!', 'success');
-    }
-    
-    this.loadPendingListings();
-    this.loadAdminListings();
-  } catch (error) {
-    this.showNotification('Error updating listing: ' + error.message, 'error');
-  }
-}
+            async loadAdminDashboard() {
+                try {
+                    const data = await this.apiCall('/admin/stats');
+                    this.renderAdminStats(data.stats);
+                    this.renderRecentActivities(data.recentActivities);
+                    
+                } catch (error) {
+                    this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
+                }
+            }
 
             renderAdminStats(stats) {
                 document.getElementById('totalUsers').textContent = stats.totalUsers;
@@ -2880,26 +2729,20 @@ async approveListing(listingId, status, rejectionReason = '') {
                 document.querySelector(`.admin-tab[data-tab="${tabId}"]`).classList.add('active');
 
                 // Load tab-specific data
-               switch(tabId) {
-    case 'dashboard':
-        this.loadAdminDashboard();
-        break;
-    case 'pending': // ADD THIS NEW CASE
-        this.loadPendingListings();
-        break;
-    case 'inquiries':
-        this.loadAdminInquiries();
-        break;
-    case 'users':
-        this.loadAdminUsers();
-        break;
-    case 'listings':
-        this.loadAdminListings();
-        break;
-    case 'commissions':
-        this.loadAdminCommissions();
-        break;
-}
+                switch(tabId) {
+                    case 'inquiries':
+                        this.loadAdminInquiries();
+                        break;
+                    case 'users':
+                        this.loadAdminUsers();
+                        break;
+                    case 'listings':
+                        this.loadAdminListings();
+                        break;
+                    case 'commissions':
+                        this.loadAdminCommissions();
+                        break;
+                }
             }
 
             async loadAdminInquiries() {
@@ -3284,24 +3127,22 @@ async approveListing(listingId, status, rejectionReason = '') {
                 `).join('');
             }
             
-         // In your search function, make sure it only searches approved listings
-
-async handleSearch() {
-    const query = document.getElementById('globalSearch').value;
-    if (!query.trim()) {
-        this.loadListings();
-        return;
-    }
-    
-    try {
-        // Force approved status in search
-        const data = await this.apiCall(`/search?q=${encodeURIComponent(query)}&status=approved`);
-        this.renderListings(data.listings, 'listingsGrid');
-        this.showNotification(`Found ${data.listings.length} results for "${query}"`, 'success');
-    } catch (error) {
-        this.showNotification('Search error: ' + error.message, 'error');
-    }
-}   
+            async handleSearch() {
+                const query = document.getElementById('globalSearch').value;
+                if (!query.trim()) {
+                    this.loadListings();
+                    return;
+                }
+                
+                try {
+                    const data = await this.apiCall(`/search?q=${encodeURIComponent(query)}`);
+                    this.renderListings(data.listings, 'listingsGrid');
+                    this.showNotification(`Found ${data.listings.length} results for "${query}"`, 'success');
+                } catch (error) {
+                    this.showNotification('Search error: ' + error.message, 'error');
+                }
+            }
+            
             switchTab(tabId) {
                 // Hide all tab contents
                 document.querySelectorAll('.tab-content').forEach(content => {
