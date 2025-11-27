@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cranevo - Heavy Machinery Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --gray: #95a5a6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 14px;
+            text-align: center;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            min-height: 36px;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: clamp(16px, 2.5vw, 20px);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .search-bar {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .search-bar button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            min-width: 60px;
+        }
+        
+        /* Categories Section */
+        .categories {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: clamp(28px, 4vw, 36px);
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            text-align: center;
+            padding: 30px 20px;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .category-icon {
+            font-size: 48px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .category-card h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        /* Listings Section */
+        .listings {
+            padding: 60px 0;
+            background-color: var(--light);
+        }
+        
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-options select {
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            min-width: 150px;
+        }
+        
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .listing-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .listing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .listing-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .listing-details {
+            padding: 20px;
+        }
+        
+        .listing-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .status-available {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status-sold {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .status-reserved {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .listing-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .listing-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .listing-specs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--gray);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .listing-specs span {
+            display: flex;
+            align-items: center;
+        }
+        
+        .listing-specs i {
+            margin-right: 5px;
+        }
+        
+        .listing-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .listing-actions .btn {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            padding: 25px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+            font-size: clamp(20px, 4vw, 24px);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .image-upload {
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .image-upload:hover {
+            border-color: var(--secondary);
+        }
+        
+        .image-upload i {
+            font-size: 40px;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            padding: 30px 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        /* Enhanced Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .listings-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                padding: 20px;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul li {
+                margin-left: 0;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .auth-buttons, .user-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                border-radius: 12px;
+            }
+            
+            .search-bar input {
+                border-radius: 12px 12px 0 0;
+            }
+            
+            .search-bar button {
+                border-radius: 0 0 12px 12px;
+                padding: 15px;
+            }
+            
+            .listings-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+            
+            .filter-options select {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .tabs, .admin-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .tab, .admin-tab {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .modal {
+                padding: 10px;
+                align-items: flex-start;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .user-info {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+                padding: 0 10px;
+            }
+            
+            .hero {
+                padding: 40px 0;
+            }
+            
+            .categories, .listings {
+                padding: 40px 0;
+            }
+            
+            .listing-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .modal-content {
+                padding: 15px;
+            }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            display: none;
+            max-width: 400px;
+            word-wrap: break-word;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--accent);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        .error-message {
+            background-color: #fee;
+            color: var(--accent);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Inquiry Styles */
+        .inquiry-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .inquiry-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .commission-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .commission-notice i {
+            color: var(--warning);
+            margin-top: 2px;
+        }
+
+        .inquiry-process {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .inquiry-process ol {
+            margin: 10px 0 0 20px;
+        }
+
+        .inquiry-process li {
+            margin-bottom: 8px;
+        }
+
+        .inquiry-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* Admin Dashboard Styles */
+        .admin-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .stat-card h3 {
+            font-size: clamp(24px, 3vw, 32px);
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .stat-card.commission {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.commission h3 {
+            color: var(--success);
+        }
+
+        .inquiries-list, .users-list, .listings-admin, .commissions-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .inquiry-item, .user-item, .listing-admin-item, .commission-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .inquiry-header, .user-header, .listing-admin-header, .commission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .inquiry-meta, .user-meta, .listing-admin-meta, .commission-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .inquiry-price, .commission-amount {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .inquiry-date, .user-date, .listing-admin-date, .commission-date {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .inquiry-parties {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .inquiry-parties {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .party-info {
+            font-size: 14px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .inquiry-message {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .commission-info {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-left: 3px solid var(--success);
+        }
+
+        .inquiry-actions, .user-actions, .listing-admin-actions, .commission-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .status-select, .role-select {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* Detailed Listing View */
+        .listing-details-modal {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .listing-details-modal {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .listing-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .price-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .listing-price-large {
+            font-size: clamp(24px, 4vw, 28px);
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 480px) {
+            .specs-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 6px;
+        }
+
+        .spec-item i {
+            color: var(--secondary);
+            width: 20px;
+        }
+
+        .description-section h4,
+        .seller-info h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .seller-info {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .modal-actions,
+        .contact-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .contact-seller-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-message textarea {
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Commission Calculation */
+        .commission-calculation {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .commission-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .commission-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .commission-row.total {
+            border-top: 2px solid var(--secondary);
+            border-bottom: none;
+            font-weight: bold;
+            background: #e7f3ff;
+            margin: 10px -15px;
+            padding: 10px 15px;
+        }
+
+        .commission-note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--warning);
+        }
+
+        .commission-actions {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .admin-tab.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+
+        .recent-activities {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            flex-shrink: 0;
+        }
+
+        .activity-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-details p {
+            margin: 0;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        .activity-time {
+            color: var(--gray);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-cogs"></i>
+                    <span>Cranevo</span>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#listings">Machinery</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="registerBtn">Register</button>
+                </div>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <button class="btn btn-outline" id="dashboardBtn">
+                        <i class="fas fa-tachometer-alt"></i> 
+                        <span class="btn-text">Dashboard</span>
+                    </button>
+                    <button class="btn btn-primary" id="addListingBtn">
+                        <i class="fas fa-plus"></i> 
+                        <span class="btn-text">Add Listing</span>
+                    </button>
+                    <button class="btn btn-warning" id="adminBtn" style="display: none;">
+                        <i class="fas fa-cog"></i> 
+                        <span class="btn-text">Admin</span>
+                    </button>
+                    <button class="btn btn-outline" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> 
+                        <span class="btn-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Heavy Machinery Marketplace</h1>
+            <p>Buy, sell, and rent heavy equipment including cranes, forklifts, trucks, and more from trusted suppliers worldwide.</p>
+            <div class="search-bar">
+                <input type="text" id="globalSearch" placeholder="Search for machinery...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <div class="section-title">
+                <h2>Browse by Category</h2>
+                <p>Find the perfect machinery for your project needs</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-category="cranes">
+                    <div class="category-icon">
+                        <i class="fas fa-crane"></i>
+                    </div>
+                    <h3>Cranes</h3>
+                    <p>Tower cranes, mobile cranes, crawler cranes and more</p>
+                </div>
+                <div class="category-card" data-category="forklifts">
+                    <div class="category-icon">
+                        <i class="fas fa-truck-pickup"></i>
+                    </div>
+                    <h3>Forklifts</h3>
+                    <p>Electric, diesel, rough terrain and warehouse forklifts</p>
+                </div>
+                <div class="category-card" data-category="trucks">
+                    <div class="category-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Trucks</h3>
+                    <p>Dump trucks, concrete mixers, heavy haul trucks</p>
+                </div>
+                <div class="category-card" data-category="excavators">
+                    <div class="category-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <h3>Excavators</h3>
+                    <p>Mini excavators, wheeled excavators, long-reach models</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Listings Section -->
+    <section class="listings" id="listings">
+        <div class="container">
+            <div class="listings-header">
+                <div class="section-title">
+                    <h2>Featured Machinery</h2>
+                </div>
+                <div class="filter-options">
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="cranes">Cranes</option>
+                        <option value="forklifts">Forklifts</option>
+                        <option value="trucks">Trucks</option>
+                        <option value="excavators">Excavators</option>
+                    </select>
+                    <select id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="sold">Sold</option>
+                        <option value="reserved">Reserved</option>
+                    </select>
+                </div>
+            </div>
+            <div class="listings-grid" id="listingsGrid">
+                <div class="loading">Loading listings...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="categories" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Simple steps to buy or sell heavy machinery</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Create Account</h3>
+                    <p>Register in minutes with your email and contact details</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Browse or List</h3>
+                    <p>Find equipment you need or list your machinery for sale</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Connect</h3>
+                    <p>Contact sellers directly or respond to buyer inquiries</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Complete Deal</h3>
+                    <p>Finalize the transaction and update listing status</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Cranevo</h3>
+                    <p>The leading marketplace for heavy machinery. Connect buyers and sellers worldwide.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#listings">Browse Machinery</a></li>
+                        <li><a href="#" id="sellEquipmentLink">Sell Equipment</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#" data-category="cranes">Cranes</a></li>
+                        <li><a href="#" data-category="forklifts">Forklifts</a></li>
+                        <li><a href="#" data-category="trucks">Trucks</a></li>
+                        <li><a href="#" data-category="excavators">Excavators</a></li>
+                        <li><a href="#" data-category="loaders">Loaders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Beirut, Lebanon</li>
+                        <li><i class="fas fa-phone"></i> +961 71 054 221</li>
+                        <li><i class="fas fa-envelope"></i> cranevo@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Cranevo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login to Cranevo</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create an Account</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" class="form-control" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="countryCode">Country Code</label>
+                       <select id="countryCode" class="form-control" required>
+    <option value="+93">+93 (Afghanistan)</option>
+    <option value="+355">+355 (Albania)</option>
+    <option value="+213">+213 (Algeria)</option>
+    <option value="+376">+376 (Andorra)</option>
+    <option value="+244">+244 (Angola)</option>
+    <option value="+1-268">+1-268 (Antigua and Barbuda)</option>
+    <option value="+54">+54 (Argentina)</option>
+    <option value="+374">+374 (Armenia)</option>
+    <option value="+297">+297 (Aruba)</option>
+    <option value="+61">+61 (Australia)</option>
+    <option value="+43">+43 (Austria)</option>
+    <option value="+994">+994 (Azerbaijan)</option>
+    <option value="+1-242">+1-242 (Bahamas)</option>
+    <option value="+973">+973 (Bahrain)</option>
+    <option value="+880">+880 (Bangladesh)</option>
+    <option value="+1-246">+1-246 (Barbados)</option>
+    <option value="+375">+375 (Belarus)</option>
+    <option value="+32">+32 (Belgium)</option>
+    <option value="+501">+501 (Belize)</option>
+    <option value="+229">+229 (Benin)</option>
+    <option value="+1-441">+1-441 (Bermuda)</option>
+    <option value="+975">+975 (Bhutan)</option>
+    <option value="+591">+591 (Bolivia)</option>
+    <option value="+387">+387 (Bosnia and Herzegovina)</option>
+    <option value="+267">+267 (Botswana)</option>
+    <option value="+55">+55 (Brazil)</option>
+    <option value="+246">+246 (British Indian Ocean Territory)</option>
+    <option value="+1-284">+1-284 (British Virgin Islands)</option>
+    <option value="+673">+673 (Brunei)</option>
+    <option value="+359">+359 (Bulgaria)</option>
+    <option value="+226">+226 (Burkina Faso)</option>
+    <option value="+257">+257 (Burundi)</option>
+    <option value="+855">+855 (Cambodia)</option>
+    <option value="+237">+237 (Cameroon)</option>
+    <option value="+1">+1 (Canada)</option>
+    <option value="+238">+238 (Cape Verde)</option>
+    <option value="+1-345">+1-345 (Cayman Islands)</option>
+    <option value="+236">+236 (Central African Republic)</option>
+    <option value="+235">+235 (Chad)</option>
+    <option value="+56">+56 (Chile)</option>
+    <option value="+86">+86 (China)</option>
+    <option value="+61">+61 (Christmas Island)</option>
+    <option value="+61">+61 (Cocos Islands)</option>
+    <option value="+57">+57 (Colombia)</option>
+    <option value="+269">+269 (Comoros)</option>
+    <option value="+682">+682 (Cook Islands)</option>
+    <option value="+506">+506 (Costa Rica)</option>
+    <option value="+385">+385 (Croatia)</option>
+    <option value="+53">+53 (Cuba)</option>
+    <option value="+599">+599 (Curaçao)</option>
+    <option value="+357">+357 (Cyprus)</option>
+    <option value="+420">+420 (Czech Republic)</option>
+    <option value="+243">+243 (Democratic Republic of the Congo)</option>
+    <option value="+45">+45 (Denmark)</option>
+    <option value="+253">+253 (Djibouti)</option>
+    <option value="+1-767">+1-767 (Dominica)</option>
+    <option value="+1-809">+1-809 (Dominican Republic)</option>
+    <option value="+670">+670 (East Timor)</option>
+    <option value="+593">+593 (Ecuador)</option>
+    <option value="+20">+20 (Egypt)</option>
+    <option value="+503">+503 (El Salvador)</option>
+    <option value="+240">+240 (Equatorial Guinea)</option>
+    <option value="+291">+291 (Eritrea)</option>
+    <option value="+372">+372 (Estonia)</option>
+    <option value="+251">+251 (Ethiopia)</option>
+    <option value="+500">+500 (Falkland Islands)</option>
+    <option value="+298">+298 (Faroe Islands)</option>
+    <option value="+679">+679 (Fiji)</option>
+    <option value="+358">+358 (Finland)</option>
+    <option value="+33">+33 (France)</option>
+    <option value="+689">+689 (French Polynesia)</option>
+    <option value="+241">+241 (Gabon)</option>
+    <option value="+220">+220 (Gambia)</option>
+    <option value="+995">+995 (Georgia)</option>
+    <option value="+49">+49 (Germany)</option>
+    <option value="+233">+233 (Ghana)</option>
+    <option value="+350">+350 (Gibraltar)</option>
+    <option value="+30">+30 (Greece)</option>
+    <option value="+299">+299 (Greenland)</option>
+    <option value="+1-473">+1-473 (Grenada)</option>
+    <option value="+1-671">+1-671 (Guam)</option>
+    <option value="+502">+502 (Guatemala)</option>
+    <option value="+44-1481">+44-1481 (Guernsey)</option>
+    <option value="+224">+224 (Guinea)</option>
+    <option value="+245">+245 (Guinea-Bissau)</option>
+    <option value="+592">+592 (Guyana)</option>
+    <option value="+509">+509 (Haiti)</option>
+    <option value="+504">+504 (Honduras)</option>
+    <option value="+852">+852 (Hong Kong)</option>
+    <option value="+36">+36 (Hungary)</option>
+    <option value="+354">+354 (Iceland)</option>
+    <option value="+91">+91 (India)</option>
+    <option value="+62">+62 (Indonesia)</option>
+    <option value="+98">+98 (Iran)</option>
+    <option value="+964">+964 (Iraq)</option>
+    <option value="+353">+353 (Ireland)</option>
+    <option value="+44-1624">+44-1624 (Isle of Man)</option>
+    <option value="+972">+972 (Israel)</option>
+    <option value="+39">+39 (Italy)</option>
+    <option value="+225">+225 (Ivory Coast)</option>
+    <option value="+1-876">+1-876 (Jamaica)</option>
+    <option value="+81">+81 (Japan)</option>
+    <option value="+44-1534">+44-1534 (Jersey)</option>
+    <option value="+962">+962 (Jordan)</option>
+    <option value="+7">+7 (Kazakhstan)</option>
+    <option value="+254">+254 (Kenya)</option>
+    <option value="+686">+686 (Kiribati)</option>
+    <option value="+383">+383 (Kosovo)</option>
+    <option value="+965">+965 (Kuwait)</option>
+    <option value="+996">+996 (Kyrgyzstan)</option>
+    <option value="+856">+856 (Laos)</option>
+    <option value="+371">+371 (Latvia)</option>
+    <option value="+961" selected>+961 (Lebanon)</option>
+    <option value="+266">+266 (Lesotho)</option>
+    <option value="+231">+231 (Liberia)</option>
+    <option value="+218">+218 (Libya)</option>
+    <option value="+423">+423 (Liechtenstein)</option>
+    <option value="+370">+370 (Lithuania)</option>
+    <option value="+352">+352 (Luxembourg)</option>
+    <option value="+853">+853 (Macau)</option>
+    <option value="+389">+389 (Macedonia)</option>
+    <option value="+261">+261 (Madagascar)</option>
+    <option value="+265">+265 (Malawi)</option>
+    <option value="+60">+60 (Malaysia)</option>
+    <option value="+960">+960 (Maldives)</option>
+    <option value="+223">+223 (Mali)</option>
+    <option value="+356">+356 (Malta)</option>
+    <option value="+692">+692 (Marshall Islands)</option>
+    <option value="+222">+222 (Mauritania)</option>
+    <option value="+230">+230 (Mauritius)</option>
+    <option value="+262">+262 (Mayotte)</option>
+    <option value="+52">+52 (Mexico)</option>
+    <option value="+691">+691 (Micronesia)</option>
+    <option value="+373">+373 (Moldova)</option>
+    <option value="+377">+377 (Monaco)</option>
+    <option value="+976">+976 (Mongolia)</option>
+    <option value="+382">+382 (Montenegro)</option>
+    <option value="+1-664">+1-664 (Montserrat)</option>
+    <option value="+212">+212 (Morocco)</option>
+    <option value="+258">+258 (Mozambique)</option>
+    <option value="+95">+95 (Myanmar)</option>
+    <option value="+264">+264 (Namibia)</option>
+    <option value="+674">+674 (Nauru)</option>
+    <option value="+977">+977 (Nepal)</option>
+    <option value="+31">+31 (Netherlands)</option>
+    <option value="+687">+687 (New Caledonia)</option>
+    <option value="+64">+64 (New Zealand)</option>
+    <option value="+505">+505 (Nicaragua)</option>
+    <option value="+227">+227 (Niger)</option>
+    <option value="+234">+234 (Nigeria)</option>
+    <option value="+683">+683 (Niue)</option>
+    <option value="+850">+850 (North Korea)</option>
+    <option value="+1-670">+1-670 (Northern Mariana Islands)</option>
+    <option value="+47">+47 (Norway)</option>
+    <option value="+968">+968 (Oman)</option>
+    <option value="+92">+92 (Pakistan)</option>
+    <option value="+680">+680 (Palau)</option>
+    <option value="+970">+970 (Palestine)</option>
+    <option value="+507">+507 (Panama)</option>
+    <option value="+675">+675 (Papua New Guinea)</option>
+    <option value="+595">+595 (Paraguay)</option>
+    <option value="+51">+51 (Peru)</option>
+    <option value="+63">+63 (Philippines)</option>
+    <option value="+64">+64 (Pitcairn)</option>
+    <option value="+48">+48 (Poland)</option>
+    <option value="+351">+351 (Portugal)</option>
+    <option value="+1-787">+1-787 (Puerto Rico)</option>
+    <option value="+974">+974 (Qatar)</option>
+    <option value="+242">+242 (Republic of the Congo)</option>
+    <option value="+262">+262 (Reunion)</option>
+    <option value="+40">+40 (Romania)</option>
+    <option value="+7">+7 (Russia)</option>
+    <option value="+250">+250 (Rwanda)</option>
+    <option value="+590">+590 (Saint Barthélemy)</option>
+    <option value="+290">+290 (Saint Helena)</option>
+    <option value="+1-869">+1-869 (Saint Kitts and Nevis)</option>
+    <option value="+1-758">+1-758 (Saint Lucia)</option>
+    <option value="+590">+590 (Saint Martin)</option>
+    <option value="+508">+508 (Saint Pierre and Miquelon)</option>
+    <option value="+1-784">+1-784 (Saint Vincent and the Grenadines)</option>
+    <option value="+685">+685 (Samoa)</option>
+    <option value="+378">+378 (San Marino)</option>
+    <option value="+239">+239 (Sao Tome and Principe)</option>
+    <option value="+966">+966 (Saudi Arabia)</option>
+    <option value="+221">+221 (Senegal)</option>
+    <option value="+381">+381 (Serbia)</option>
+    <option value="+248">+248 (Seychelles)</option>
+    <option value="+232">+232 (Sierra Leone)</option>
+    <option value="+65">+65 (Singapore)</option>
+    <option value="+1-721">+1-721 (Sint Maarten)</option>
+    <option value="+421">+421 (Slovakia)</option>
+    <option value="+386">+386 (Slovenia)</option>
+    <option value="+677">+677 (Solomon Islands)</option>
+    <option value="+252">+252 (Somalia)</option>
+    <option value="+27">+27 (South Africa)</option>
+    <option value="+82">+82 (South Korea)</option>
+    <option value="+211">+211 (South Sudan)</option>
+    <option value="+34">+34 (Spain)</option>
+    <option value="+94">+94 (Sri Lanka)</option>
+    <option value="+249">+249 (Sudan)</option>
+    <option value="+597">+597 (Suriname)</option>
+    <option value="+47">+47 (Svalbard and Jan Mayen)</option>
+    <option value="+268">+268 (Swaziland)</option>
+    <option value="+46">+46 (Sweden)</option>
+    <option value="+41">+41 (Switzerland)</option>
+    <option value="+963">+963 (Syria)</option>
+    <option value="+886">+886 (Taiwan)</option>
+    <option value="+992">+992 (Tajikistan)</option>
+    <option value="+255">+255 (Tanzania)</option>
+    <option value="+66">+66 (Thailand)</option>
+    <option value="+228">+228 (Togo)</option>
+    <option value="+690">+690 (Tokelau)</option>
+    <option value="+676">+676 (Tonga)</option>
+    <option value="+1-868">+1-868 (Trinidad and Tobago)</option>
+    <option value="+216">+216 (Tunisia)</option>
+    <option value="+90">+90 (Turkey)</option>
+    <option value="+993">+993 (Turkmenistan)</option>
+    <option value="+1-649">+1-649 (Turks and Caicos Islands)</option>
+    <option value="+688">+688 (Tuvalu)</option>
+    <option value="+1-340">+1-340 (U.S. Virgin Islands)</option>
+    <option value="+256">+256 (Uganda)</option>
+    <option value="+380">+380 (Ukraine)</option>
+    <option value="+971">+971 (United Arab Emirates)</option>
+    <option value="+44">+44 (United Kingdom)</option>
+    <option value="+1">+1 (United States)</option>
+    <option value="+598">+598 (Uruguay)</option>
+    <option value="+998">+998 (Uzbekistan)</option>
+    <option value="+678">+678 (Vanuatu)</option>
+    <option value="+379">+379 (Vatican)</option>
+    <option value="+58">+58 (Venezuela)</option>
+    <option value="+84">+84 (Vietnam)</option>
+    <option value="+681">+681 (Wallis and Futuna)</option>
+    <option value="+212">+212 (Western Sahara)</option>
+    <option value="+967">+967 (Yemen)</option>
+    <option value="+260">+260 (Zambia)</option>
+    <option value="+263">+263 (Zimbabwe)</option>
+</select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" id="phoneNumber" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">Already have an account? <a href="#" id="switchToLogin">Login here</a></p>
+        </div>
+    </div>
+
+    <!-- Add Listing Modal -->
+    <div class="modal" id="addListingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Listing</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="addListingForm">
+                <div class="form-group">
+                    <label for="listingTitle">Title</label>
+                    <input type="text" id="listingTitle" class="form-control" required placeholder="e.g., Liebherr 630 EC-H Tower Crane">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="listingCategory">Category</label>
+                        <select id="listingCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="cranes">Cranes</option>
+                            <option value="forklifts">Forklifts</option>
+                            <option value="trucks">Trucks</option>
+                            <option value="excavators">Excavators</option>
+                            <option value="loaders">Loaders</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="listingPrice">Price ($)</label>
+                        <input type="number" id="listingPrice" class="form-control" required placeholder="e.g., 185000">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="listingDescription">Description</label>
+                    <textarea id="listingDescription" class="form-control" required placeholder="Describe the machinery, condition, features, etc."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="listingYear">Year</label>
+                        <input type="number" id="listingYear" class="form-control" required min="1950" max="2023" placeholder="e.g., 2019">
+                    </div>
+                    <div class="form-group">
+                        <label for="listingHours">Operating Hours</label>
+                        <input type="number" id="listingHours" class="form-control" placeholder="e.g., 2500">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="listingCapacity">Capacity (tons)</label>
+                        <input type="number" id="listingCapacity" class="form-control" step="0.1" placeholder="e.g., 32">
+                    </div>
+                    <div class="form-group">
+                        <label for="listingBoomLength">Boom Length (m)</label>
+                        <input type="number" id="listingBoomLength" class="form-control" step="0.1" placeholder="e.g., 70">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="listingLocation">Location</label>
+                    <input type="text" id="listingLocation" class="form-control" required placeholder="e.g., Beirut, Lebanon">
+                </div>
+                
+                <div class="form-group">
+                    <label>Images</label>
+                    <div class="image-upload" id="imageUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload images or drag and drop</p>
+                        <input type="file" id="listingImages" multiple accept="image/*" style="display: none;">
+                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Add Listing</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div class="modal" id="dashboardModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>My Dashboard</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="dashboard">
+                <div class="dashboard-header">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div>
+                            <h3 id="userName">User Name</h3>
+                            <p id="userEmail">user@example.com</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="addListingFromDashboard">Add New Listing</button>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="my-listings">My Listings</div>
+                    <div class="tab" data-tab="saved-listings">Saved Listings</div>
+                    <div class="tab" data-tab="profile">Profile</div>
+                </div>
+                
+                <div class="tab-content active" id="my-listings">
+                    <h3>My Machinery Listings</h3>
+                    <div class="listings-grid" id="myListingsGrid">
+                        <!-- User's listings will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="saved-listings">
+                    <h3>Saved Listings</h3>
+                    <div class="listings-grid" id="savedListingsGrid">
+                        <!-- Saved listings will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="profile">
+                    <h3>Profile Settings</h3>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="profileName">Full Name</label>
+                            <input type="text" id="profileName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">Email</label>
+                            <input type="email" id="profileEmail" class="form-control" required readonly>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profileCountryCode">Country Code</label>
+                                <select id="profileCountryCode" class="form-control" required>
+                                    <option value="+961">+961 (Lebanon)</option>
+                                    <option value="+1">+1 (USA)</option>
+                                    <option value="+44">+44 (UK)</option>
+                                    <option value="+61">+61 (Australia)</option>
+                                    <option value="+49">+49 (Germany)</option>
+                                    <option value="+33">+33 (France)</option>
+                                    <option value="+81">+81 (Japan)</option>
+                                    <option value="+86">+86 (China)</option>
+                                    <option value="+91">+91 (India)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Phone Number</label>
+                                <input type="tel" id="profilePhone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileCompany">Company (Optional)</label>
+                            <input type="text" id="profileCompany" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content" style="max-width: 1200px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Admin Dashboard - Cranevo Management</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="admin-dashboard">
+                <div class="admin-tabs">
+                    <div class="admin-tab active" data-tab="dashboard">Dashboard</div>
+                    <div class="admin-tab" data-tab="inquiries">Inquiries</div>
+                    <div class="admin-tab" data-tab="users">Users</div>
+                    <div class="admin-tab" data-tab="listings">Listings</div>
+                    <div class="admin-tab" data-tab="commissions">Commissions</div>
+                </div>
+                
+                <!-- Dashboard Tab -->
+                <div class="admin-tab-content active" id="admin-dashboard">
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="totalListings">0</h3>
+                            <p>Total Listings</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="totalInquiries">0</h3>
+                            <p>Total Inquiries</p>
+                        </div>
+                        <div class="stat-card commission">
+                            <h3 id="totalCommission">$0</h3>
+                            <p>Total Commission</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-activities">
+                        <h3>Recent Activities</h3>
+                        <div id="recentActivities">
+                            <div class="loading">Loading activities...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inquiries Tab -->
+                <div class="admin-tab-content" id="admin-inquiries">
+                    <div class="inquiries-list">
+                        <h3>Manage Inquiries</h3>
+                        <div class="inquiries-container" id="inquiriesContainer">
+                            <div class="loading">Loading inquiries...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Users Tab -->
+                <div class="admin-tab-content" id="admin-users">
+                    <div class="users-list">
+                        <h3>Manage Users</h3>
+                        <div class="users-container" id="usersContainer">
+                            <div class="loading">Loading users...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Listings Tab -->
+                <div class="admin-tab-content" id="admin-listings">
+                    <div class="listings-admin">
+                        <h3>Manage Listings</h3>
+                        <div class="listings-admin-container" id="listingsAdminContainer">
+                            <div class="loading">Loading listings...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Commissions Tab -->
+                <div class="admin-tab-content" id="admin-commissions">
+                    <div class="commissions-list">
+                        <h3>Commission Tracking</h3>
+                        <div class="commissions-container" id="commissionsContainer">
+                            <div class="loading">Loading commission data...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+       // For development - uses localhost
+// For production - uses your deployed backend URL
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:5000/api' 
+  : 'https://your-actual-backend-url.railway.app/api'; // ← CHANGE THIS AFTER DEPLOYMENT
+
+        // Frontend Application with Real API Calls
+        class CranevoApp {
+            constructor() {
+                this.token = localStorage.getItem('cranevo_token');
+                this.user = JSON.parse(localStorage.getItem('cranevo_user')) || null;
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.checkAuthState();
+                this.loadListings();
+                this.setupMobileMenu();
+            }
+            
+            setupMobileMenu() {
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                const mainNav = document.getElementById('mainNav');
+                
+                if (mobileMenuBtn && mainNav) {
+                    mobileMenuBtn.addEventListener('click', () => {
+                        mainNav.classList.toggle('active');
+                    });
+                    
+                    // Close mobile menu when clicking outside
+                    document.addEventListener('click', (e) => {
+                        if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                            mainNav.classList.remove('active');
+                        }
+                    });
+                }
+            }
+            
+            bindEvents() {
+                // Auth buttons
+                document.getElementById('loginBtn').addEventListener('click', () => this.showModal('loginModal'));
+                document.getElementById('registerBtn').addEventListener('click', () => this.showModal('registerModal'));
+                document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+                document.getElementById('addListingBtn').addEventListener('click', () => this.showModal('addListingModal'));
+                document.getElementById('addListingFromDashboard').addEventListener('click', () => {
+                    this.hideModal('dashboardModal');
+                    this.showModal('addListingModal');
+                });
+                document.getElementById('dashboardBtn').addEventListener('click', () => this.showDashboard());
+                document.getElementById('adminBtn').addEventListener('click', () => this.showAdminDashboard());
+                document.getElementById('sellEquipmentLink').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (this.user) {
+                        this.showModal('addListingModal');
+                    } else {
+                        this.showModal('registerModal');
+                    }
+                });
+                
+                // Modal controls
+                document.querySelectorAll('.close-modal').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const modal = e.target.closest('.modal');
+                        this.hideModal(modal.id);
+                    });
+                });
+                
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            this.hideModal(modal.id);
+                        }
+                    });
+                });
+                
+                // Form submissions
+                document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
+                document.getElementById('registerForm').addEventListener('submit', (e) => this.handleRegister(e));
+                document.getElementById('addListingForm').addEventListener('submit', (e) => this.handleAddListing(e));
+                document.getElementById('profileForm').addEventListener('submit', (e) => this.handleProfileUpdate(e));
+                
+                // Tab controls
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.getAttribute('data-tab');
+                        this.switchTab(tabId);
+                    });
+                });
+
+                // Admin tab controls
+                document.querySelectorAll('.admin-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.getAttribute('data-tab');
+                        this.switchAdminTab(tabId);
+                    });
+                });
+                
+                // Category filters
+                document.querySelectorAll('.category-card, .footer-column a[data-category]').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const category = el.getAttribute('data-category');
+                        document.getElementById('categoryFilter').value = category;
+                        this.loadListings();
+                    });
+                });
+                
+                // Listing filters
+                document.getElementById('categoryFilter').addEventListener('change', () => this.loadListings());
+                document.getElementById('statusFilter').addEventListener('change', () => this.loadListings());
+                
+                // Image upload
+                document.getElementById('imageUpload').addEventListener('click', () => {
+                    document.getElementById('listingImages').click();
+                });
+                
+                document.getElementById('listingImages').addEventListener('change', (e) => {
+                    this.handleImageUpload(e);
+                });
+                
+                // Search
+                document.getElementById('searchButton').addEventListener('click', () => this.handleSearch());
+                document.getElementById('globalSearch').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleSearch();
+                });
+                
+                // Switch between login/register modals
+                document.getElementById('switchToRegister').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.hideModal('loginModal');
+                    this.showModal('registerModal');
+                });
+                
+                document.getElementById('switchToLogin').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.hideModal('registerModal');
+                    this.showModal('loginModal');
+                });
+            }
+            
+            async apiCall(endpoint, options = {}) {
+                try {
+                    const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers
+                        },
+                        ...options
+                    };
+                    
+                    if (this.token && !endpoint.includes('/login') && !endpoint.includes('/register')) {
+                        config.headers.Authorization = `Bearer ${this.token}`;
+                    }
+                    
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'API request failed');
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error('API call error:', error);
+                    throw error;
+                }
+            }
+            
+            checkAuthState() {
+                if (this.user && this.token) {
+                    this.showUserMenu();
+                    // Show admin button if user is admin
+                    if (this.user.role === 'admin') {
+                        document.getElementById('adminBtn').style.display = 'inline-block';
+                    }
+                } else {
+                    this.showAuthButtons();
+                }
+            }
+            
+            showAuthButtons() {
+                document.getElementById('authButtons').style.display = 'flex';
+                document.getElementById('userMenu').style.display = 'none';
+            }
+            
+            showUserMenu() {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'flex';
+            }
+            
+            showModal(modalId) {
+                document.getElementById(modalId).style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            hideModal(modalId) {
+                document.getElementById(modalId).style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
+            showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000);
+            }
+            
+            async handleLogin(e) {
+                e.preventDefault();
+                try {
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    const data = await this.apiCall('/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    this.token = data.token;
+                    this.user = data.user;
+                    
+                    localStorage.setItem('cranevo_token', this.token);
+                    localStorage.setItem('cranevo_user', JSON.stringify(this.user));
+                    
+                    this.showNotification('Login successful!', 'success');
+                    this.hideModal('loginModal');
+                    this.checkAuthState();
+                    this.loadListings();
+                    this.resetForm('loginForm');
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                }
+            }
+            
+            async handleRegister(e) {
+                e.preventDefault();
+                try {
+                    const name = document.getElementById('registerName').value;
+                    const email = document.getElementById('registerEmail').value;
+                    const countryCode = document.getElementById('countryCode').value;
+                    const phone = document.getElementById('phoneNumber').value;
+                    const password = document.getElementById('registerPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    if (password !== confirmPassword) {
+                        this.showNotification('Passwords do not match', 'error');
+                        return;
+                    }
+                    
+                    const data = await this.apiCall('/register', {
+                        method: 'POST',
+                        body: JSON.stringify({ name, email, password, countryCode, phone })
+                    });
+                    
+                    this.showNotification('Registration successful! Please login.', 'success');
+                    this.hideModal('registerModal');
+                    this.showModal('loginModal');
+                    this.resetForm('registerForm');
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                }
+            }
+            
+            async handleAddListing(e) {
+                e.preventDefault();
+                try {
+                    if (!this.user) {
+                        this.showNotification('Please login to add a listing', 'error');
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    const formElements = document.getElementById('addListingForm').elements;
+                    
+                    formData.append('title', formElements.listingTitle.value);
+                    formData.append('category', formElements.listingCategory.value);
+                    formData.append('price', formElements.listingPrice.value);
+                    formData.append('description', formElements.listingDescription.value);
+                    formData.append('year', formElements.listingYear.value);
+                    formData.append('hours', formElements.listingHours.value || 0);
+                    formData.append('capacity', formElements.listingCapacity.value || 0);
+                    formData.append('boomLength', formElements.listingBoomLength.value || 0);
+                    formData.append('location', formElements.listingLocation.value);
+                    
+                    const imageFiles = document.getElementById('listingImages').files;
+                    for (let i = 0; i < imageFiles.length; i++) {
+                        formData.append('images', imageFiles[i]);
+                    }
+                    
+                    const response = await fetch(`${API_BASE_URL}/listings`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        },
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Failed to create listing');
+                    }
+                    
+                    this.showNotification('Listing added successfully!', 'success');
+                    this.hideModal('addListingModal');
+                    this.resetForm('addListingForm');
+                    this.loadListings();
+                    // Refresh dashboard if open
+                    if (document.getElementById('dashboardModal').style.display === 'flex') {
+                        this.loadDashboard();
+                    }
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                }
+            }
+            
+            async handleProfileUpdate(e) {
+                e.preventDefault();
+                try {
+                    const name = document.getElementById('profileName').value;
+                    const countryCode = document.getElementById('profileCountryCode').value;
+                    const phone = document.getElementById('profilePhone').value;
+                    const company = document.getElementById('profileCompany').value;
+                    
+                    const data = await this.apiCall('/profile', {
+                        method: 'PUT',
+                        body: JSON.stringify({ name, countryCode, phone, company })
+                    });
+                    
+                    this.user = data.user;
+                    localStorage.setItem('cranevo_user', JSON.stringify(this.user));
+                    
+                    this.showNotification('Profile updated successfully!', 'success');
+                    this.loadDashboard();
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                }
+            }
+            
+            handleImageUpload(e) {
+                const files = e.target.files;
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = '';
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'preview-image';
+                        preview.appendChild(img);
+                    }
+                    
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            resetForm(formId) {
+                document.getElementById(formId).reset();
+                const imagePreview = document.getElementById('imagePreview');
+                if (imagePreview) imagePreview.innerHTML = '';
+            }
+            
+            async logout() {
+                this.token = null;
+                this.user = null;
+                localStorage.removeItem('cranevo_token');
+                localStorage.removeItem('cranevo_user');
+                
+                this.showNotification('Logged out successfully', 'success');
+                this.checkAuthState();
+                this.loadListings();
+            }
+            
+            async loadListings() {
+                try {
+                    const categoryFilter = document.getElementById('categoryFilter').value;
+                    const statusFilter = document.getElementById('statusFilter').value;
+                    
+                    let endpoint = '/listings?';
+                    if (categoryFilter !== 'all') endpoint += `category=${categoryFilter}&`;
+                    if (statusFilter !== 'all') endpoint += `status=${statusFilter}&`;
+                    
+                    const data = await this.apiCall(endpoint);
+                    this.renderListings(data.listings, 'listingsGrid');
+                } catch (error) {
+                    document.getElementById('listingsGrid').innerHTML = 
+                        '<div class="error-message">Error loading listings: ' + error.message + '</div>';
+                }
+            }
+            
+            renderListings(listings, containerId) {
+                const container = document.getElementById(containerId);
+                
+                if (!listings || listings.length === 0) {
+                    container.innerHTML = '<p>No listings found</p>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                listings.forEach(listing => {
+                    const listingCard = this.createListingCard(listing);
+                    container.appendChild(listingCard);
+                });
+            }
+            
+            createListingCard(listing) {
+                const card = document.createElement('div');
+                card.className = 'listing-card';
+                
+                const statusClass = `status-${listing.status}`;
+                const statusText = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
+                const mainImage = listing.images && listing.images.length > 0 ? 
+                    `http://localhost:5000${listing.images[0]}` : 
+                    'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+                
+                card.innerHTML = `
+                    <img src="${mainImage}" alt="${listing.title}" class="listing-image">
+                    <div class="listing-details">
+                        <span class="listing-status ${statusClass}">${statusText}</span>
+                        <h3 class="listing-title">${listing.title}</h3>
+                        <div class="listing-price">$${listing.price.toLocaleString()}</div>
+                        <div class="listing-specs">
+                            ${listing.year ? `<span><i class="fas fa-calendar"></i> ${listing.year}</span>` : ''}
+                            ${listing.capacity ? `<span><i class="fas fa-weight-hanging"></i> ${listing.capacity}T</span>` : ''}
+                            ${listing.boomLength ? `<span><i class="fas fa-ruler"></i> ${listing.boomLength}m</span>` : ''}
+                        </div>
+                        <p>${listing.description.substring(0, 100)}${listing.description.length > 100 ? '...' : ''}</p>
+                        <div class="listing-actions">
+                            <button class="btn btn-outline view-details" data-id="${listing._id}">View Details</button>
+                            <button class="btn btn-primary contact-seller" data-id="${listing._id}">Submit Inquiry</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners to buttons
+                card.querySelector('.view-details').addEventListener('click', () => {
+                    this.showListingDetails(listing);
+                });
+                
+                card.querySelector('.contact-seller').addEventListener('click', () => {
+                    this.contactSeller(listing);
+                });
+                
+                return card;
+            }
+            
+            showListingDetails(listing) {
+                // Create a detailed view modal
+                const modalContent = `
+                    <div class="modal-header">
+                        <h2>${listing.title}</h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="listing-details-modal">
+                        <div class="image-gallery">
+                            ${listing.images && listing.images.length > 0 ? 
+                                listing.images.map(img => 
+                                    `<img src="http://localhost:5000${img}" alt="${listing.title}" class="detail-image">`
+                                ).join('') : 
+                                '<img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="No image" class="detail-image">'
+                            }
+                        </div>
+                        <div class="listing-info">
+                            <div class="price-status">
+                                <span class="listing-price-large">$${listing.price.toLocaleString()}</span>
+                                <span class="listing-status status-${listing.status}">${listing.status.charAt(0).toUpperCase() + listing.status.slice(1)}</span>
+                            </div>
+                            <div class="specs-grid">
+                                ${listing.year ? `<div class="spec-item"><i class="fas fa-calendar"></i><span>Year: ${listing.year}</span></div>` : ''}
+                                ${listing.hours ? `<div class="spec-item"><i class="fas fa-clock"></i><span>Hours: ${listing.hours}</span></div>` : ''}
+                                ${listing.capacity ? `<div class="spec-item"><i class="fas fa-weight-hanging"></i><span>Capacity: ${listing.capacity}T</span></div>` : ''}
+                                ${listing.boomLength ? `<div class="spec-item"><i class="fas fa-ruler"></i><span>Boom Length: ${listing.boomLength}m</span></div>` : ''}
+                                <div class="spec-item"><i class="fas fa-map-marker-alt"></i><span>Location: ${listing.location}</span></div>
+                            </div>
+                            <div class="description-section">
+                                <h4>Description</h4>
+                                <p>${listing.description}</p>
+                            </div>
+                            <div class="seller-info">
+                                <h4>Seller Information</h4>
+                                <p><strong>Name:</strong> ${listing.userId.name}</p>
+                                <p><strong>Email:</strong> ${listing.userId.email}</p>
+                                <p><strong>Phone:</strong> ${listing.userId.countryCode} ${listing.userId.phone}</p>
+                                ${listing.userId.company ? `<p><strong>Company:</strong> ${listing.userId.company}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary contact-seller-detail" data-id="${listing._id}">Submit Inquiry</button>
+                        <button class="btn btn-outline close-detail">Close</button>
+                    </div>
+                `;
+                
+                this.showCustomModal('Listing Details', modalContent);
+                
+                // Add event listeners for the new modal
+                document.querySelector('.contact-seller-detail').addEventListener('click', () => {
+                    this.contactSeller(listing);
+                    this.hideModal('customModal');
+                });
+                
+                document.querySelector('.close-detail').addEventListener('click', () => {
+                    this.hideModal('customModal');
+                });
+            }
+            
+            contactSeller(listing) {
+                if (!this.user) {
+                    this.showNotification('Please login to submit an inquiry', 'error');
+                    this.showModal('loginModal');
+                    return;
+                }
+
+                // Show inquiry modal instead of contact modal
+                const inquiryContent = `
+                    <div class="inquiry-modal">
+                        <h3><i class="fas fa-handshake"></i> Submit Inquiry</h3>
+                        <div class="inquiry-info">
+                            <p><strong>Machine:</strong> ${listing.title}</p>
+                            <p><strong>Price:</strong> $${listing.price.toLocaleString()}</p>
+                            <p><strong>Seller:</strong> ${listing.userId.name}</p>
+                            <div class="commission-notice">
+                                <i class="fas fa-info-circle"></i>
+                                <span><strong>Note to Buyer:</strong> The seller pays a 5% commission fee to Cranevo upon successful transaction. This does not affect your purchase price.</span>
+                            </div>
+                        </div>
+                        <div class="inquiry-form">
+                            <div class="form-group">
+                                <label>Your Message to Us:</label>
+                                <textarea class="form-control" id="inquiryMessage" rows="6" placeholder="Tell us about your interest in this machinery. Include any specific requirements, timeline, or questions..."></textarea>
+                            </div>
+                            <div class="inquiry-process">
+                                <h4><i class="fas fa-sync-alt"></i> How It Works:</h4>
+                                <ol>
+                                    <li>You submit this inquiry</li>
+                                    <li>We contact you within 24 hours</li>
+                                    <li>We negotiate with the seller on your behalf</li>
+                                    <li>You pay the listed price directly to the seller</li>
+                                    <li>The seller pays us a 5% commission for facilitating the sale</li>
+                                    <li>We ensure smooth delivery and handle any issues</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="inquiry-actions">
+                            <button class="btn btn-primary" id="submitInquiry">Submit Inquiry</button>
+                            <button class="btn btn-outline close-inquiry">Cancel</button>
+                        </div>
+                    </div>
+                `;
+
+                this.showCustomModal('Submit Inquiry', inquiryContent);
+
+                // Handle inquiry submission
+                document.getElementById('submitInquiry').addEventListener('click', async () => {
+                    const message = document.getElementById('inquiryMessage').value.trim();
+                    
+                    if (!message) {
+                        this.showNotification('Please enter your inquiry message', 'error');
+                        return;
+                    }
+
+                    try {
+                        const data = await this.apiCall('/inquiries', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                listingId: listing._id,
+                                message: message
+                            })
+                        });
+
+                        this.showNotification('Inquiry submitted successfully! We will contact you within 24 hours.', 'success');
+                        this.hideModal('customModal');
+                    } catch (error) {
+                        this.showNotification('Error submitting inquiry: ' + error.message, 'error');
+                    }
+                });
+
+                document.querySelector('.close-inquiry').addEventListener('click', () => {
+                    this.hideModal('customModal');
+                });
+            }
+            
+            showCustomModal(title, content) {
+                // Create or update custom modal
+                let modal = document.getElementById('customModal');
+                if (!modal) {
+                    modal = document.createElement('div');
+                    modal.id = 'customModal';
+                    modal.className = 'modal';
+                    modal.innerHTML = `
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2>${title}</h2>
+                                <button class="close-modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                ${content}
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                    
+                    // Add close functionality
+                    modal.querySelector('.close-modal').addEventListener('click', () => {
+                        this.hideModal('customModal');
+                    });
+                    
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            this.hideModal('customModal');
+                        }
+                    });
+                } else {
+                    modal.querySelector('.modal-header h2').textContent = title;
+                    modal.querySelector('.modal-body').innerHTML = content;
+                }
+                
+                this.showModal('customModal');
+            }
+            
+            async showDashboard() {
+                await this.loadDashboard();
+                this.showModal('dashboardModal');
+            }
+            
+            async loadDashboard() {
+                if (!this.user) return;
+                
+                try {
+                    // Load user info
+                    const profileData = await this.apiCall('/profile');
+                    const user = profileData.user;
+                    
+                    document.getElementById('userName').textContent = user.name;
+                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+                    
+                    // Load profile form
+                    document.getElementById('profileName').value = user.name;
+                    document.getElementById('profileEmail').value = user.email;
+                    document.getElementById('profileCountryCode').value = user.countryCode;
+                    document.getElementById('profilePhone').value = user.phone;
+                    document.getElementById('profileCompany').value = user.company || '';
+                    
+                    // Load user's listings
+                    const myListingsData = await this.apiCall('/my-listings');
+                    this.renderListings(myListingsData.listings, 'myListingsGrid');
+                    
+                } catch (error) {
+                    this.showNotification('Error loading dashboard: ' + error.message, 'error');
+                }
+            }
+
+            async showAdminDashboard() {
+                if (!this.user) return;
+                
+                if (this.user.role === 'admin') {
+                    await this.loadAdminDashboard();
+                    this.showModal('adminModal');
+                } else {
+                    this.showNotification('Admin access required', 'error');
+                }
+            }
+
+            async loadAdminDashboard() {
+                try {
+                    const data = await this.apiCall('/admin/stats');
+                    this.renderAdminStats(data.stats);
+                    this.renderRecentActivities(data.recentActivities);
+                    
+                } catch (error) {
+                    this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
+                }
+            }
+
+            renderAdminStats(stats) {
+                document.getElementById('totalUsers').textContent = stats.totalUsers;
+                document.getElementById('totalListings').textContent = stats.totalListings;
+                document.getElementById('totalInquiries').textContent = stats.totalInquiries;
+                document.getElementById('totalCommission').textContent = `$${stats.totalCommission.toLocaleString()}`;
+            }
+
+            renderRecentActivities(activities) {
+                const container = document.getElementById('recentActivities');
+                
+                if (!activities || activities.length === 0) {
+                    container.innerHTML = '<p>No recent activities</p>';
+                    return;
+                }
+                
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="activity-details">
+                            <p><strong>${activity.buyerId.name}</strong> inquired about <strong>${activity.listingId.title}</strong></p>
+                            <div class="activity-time">${new Date(activity.createdAt).toLocaleString()}</div>
+                        </div>
+                        <span class="inquiry-status status-${activity.status}">${activity.status}</span>
+                    </div>
+                `).join('');
+            }
+
+            switchAdminTab(tabId) {
+                // Hide all admin tab contents
+                document.querySelectorAll('.admin-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Remove active class from all admin tabs
+                document.querySelectorAll('.admin-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                // Show selected admin tab content
+                document.getElementById(`admin-${tabId}`).classList.add('active');
+                
+                // Activate selected admin tab
+                document.querySelector(`.admin-tab[data-tab="${tabId}"]`).classList.add('active');
+
+                // Load tab-specific data
+                switch(tabId) {
+                    case 'inquiries':
+                        this.loadAdminInquiries();
+                        break;
+                    case 'users':
+                        this.loadAdminUsers();
+                        break;
+                    case 'listings':
+                        this.loadAdminListings();
+                        break;
+                    case 'commissions':
+                        this.loadAdminCommissions();
+                        break;
+                }
+            }
+
+            async loadAdminInquiries() {
+                try {
+                    const data = await this.apiCall('/admin/inquiries');
+                    this.renderInquiries(data.inquiries);
+                    
+                } catch (error) {
+                    document.getElementById('inquiriesContainer').innerHTML = 
+                        '<div class="error-message">Error loading inquiries: ' + error.message + '</div>';
+                }
+            }
+
+            renderInquiries(inquiries) {
+                const container = document.getElementById('inquiriesContainer');
+                
+                if (!inquiries || inquiries.length === 0) {
+                    container.innerHTML = '<p>No inquiries yet</p>';
+                    return;
+                }
+                
+                container.innerHTML = inquiries.map(inquiry => `
+                    <div class="inquiry-item" data-id="${inquiry._id}">
+                        <div class="inquiry-header">
+                            <div class="inquiry-meta">
+                                <strong>${inquiry.listingId.title}</strong>
+                                <span class="inquiry-price">$${inquiry.listingId.price.toLocaleString()}</span>
+                                <span class="inquiry-status status-${inquiry.status}">${inquiry.status}</span>
+                            </div>
+                            <div class="inquiry-date">${new Date(inquiry.createdAt).toLocaleDateString()}</div>
+                        </div>
+                        <div class="inquiry-parties">
+                            <div class="party-info">
+                                <strong>Buyer:</strong> ${inquiry.buyerId.name} (${inquiry.buyerId.email}) - ${inquiry.buyerId.countryCode}${inquiry.buyerId.phone}
+                            </div>
+                            <div class="party-info">
+                                <strong>Seller:</strong> ${inquiry.sellerId.name} (${inquiry.sellerId.email}) - ${inquiry.sellerId.countryCode}${inquiry.sellerId.phone}
+                            </div>
+                        </div>
+                        <div class="commission-info">
+                            <strong>Commission:</strong> ${(inquiry.commissionRate * 100)}% (Charged to Seller)
+                            ${inquiry.status === 'completed' && inquiry.commissionAmount ? 
+                                `<br><small>Commission Amount: $${inquiry.commissionAmount.toLocaleString()}</small>` : 
+                                ''
+                            }
+                        </div>
+                        <div class="inquiry-message">
+                            <strong>Message:</strong> ${inquiry.message}
+                        </div>
+                        <div class="inquiry-actions">
+                            <button class="btn btn-sm btn-outline contact-buyer" data-email="${inquiry.buyerId.email}" data-phone="${inquiry.buyerId.phone}">
+                                <i class="fas fa-phone"></i> Contact Buyer
+                            </button>
+                            <button class="btn btn-sm btn-outline contact-seller" data-email="${inquiry.sellerId.email}" data-phone="${inquiry.sellerId.phone}">
+                                <i class="fas fa-phone"></i> Contact Seller
+                            </button>
+                            ${inquiry.status === 'negotiating' ? `
+                                <button class="btn btn-sm btn-success calculate-commission" data-inquiry="${inquiry._id}" data-price="${inquiry.listingId.price}">
+                                    <i class="fas fa-calculator"></i> Calculate Commission
+                                </button>
+                            ` : ''}
+                            <select class="status-select" data-inquiry="${inquiry._id}">
+                                <option value="pending" ${inquiry.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="contacted" ${inquiry.status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                                <option value="negotiating" ${inquiry.status === 'negotiating' ? 'selected' : ''}>Negotiating</option>
+                                <option value="completed" ${inquiry.status === 'completed' ? 'selected' : ''}>Completed</option>
+                                <option value="cancelled" ${inquiry.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners
+                container.querySelectorAll('.contact-buyer').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const email = btn.getAttribute('data-email');
+                        const phone = btn.getAttribute('data-phone');
+                        this.showContactInfo('Buyer', email, phone);
+                    });
+                });
+                
+                container.querySelectorAll('.contact-seller').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const email = btn.getAttribute('data-email');
+                        const phone = btn.getAttribute('data-phone');
+                        this.showContactInfo('Seller', email, phone);
+                    });
+                });
+                
+                container.querySelectorAll('.calculate-commission').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const inquiryId = btn.getAttribute('data-inquiry');
+                        const listingPrice = btn.getAttribute('data-price');
+                        this.calculateCommission(inquiryId, listingPrice);
+                    });
+                });
+                
+                container.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', (e) => {
+                        this.updateInquiryStatus(e.target.getAttribute('data-inquiry'), e.target.value);
+                    });
+                });
+            }
+
+            showContactInfo(role, email, phone) {
+                const message = `${role} Contact Information:\n\nEmail: ${email}\nPhone: ${phone}\n\nYou can now contact them directly to facilitate the transaction.`;
+                
+                this.showCustomModal(`${role} Contact Info`, `
+                    <div class="contact-info">
+                        <h3>${role} Details</h3>
+                        <div class="contact-details">
+                            <p><strong>Email:</strong> ${email}</p>
+                            <p><strong>Phone:</strong> ${phone}</p>
+                        </div>
+                        <div class="contact-actions">
+                            <a href="mailto:${email}" class="btn btn-primary">Send Email</a>
+                            <button class="btn btn-outline close-contact">Close</button>
+                        </div>
+                    </div>
+                `);
+                
+                document.querySelector('.close-contact').addEventListener('click', () => {
+                    this.hideModal('customModal');
+                });
+            }
+
+            async calculateCommission(inquiryId, listingPrice) {
+                try {
+                    const data = await this.apiCall('/admin/calculate-commission', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            finalSalePrice: parseFloat(listingPrice)
+                        })
+                    });
+                    
+                    const commissionContent = `
+                        <div class="commission-calculation">
+                            <h3>Commission Breakdown</h3>
+                            <div class="commission-details">
+                                <div class="commission-row">
+                                    <span>Final Sale Price:</span>
+                                    <span>$${data.finalSalePrice.toLocaleString()}</span>
+                                </div>
+                                <div class="commission-row">
+                                    <span>Commission Rate:</span>
+                                    <span>${data.commissionRate}%</span>
+                                </div>
+                                <div class="commission-row total">
+                                    <span><strong>Commission Amount:</strong></span>
+                                    <span><strong>$${data.commissionAmount.toLocaleString()}</strong></span>
+                                </div>
+                                <div class="commission-row">
+                                    <span>Seller Receives:</span>
+                                    <span>$${data.sellerReceives.toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="commission-note">
+                                <p><i class="fas fa-info-circle"></i> The commission of $${data.commissionAmount.toLocaleString()} will be charged to the seller upon successful transaction completion.</p>
+                            </div>
+                            <div class="commission-actions">
+                                <button class="btn btn-primary" id="markCompleted" data-inquiry="${inquiryId}" data-price="${listingPrice}">Mark as Completed</button>
+                                <button class="btn btn-outline close-commission">Close</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    this.showCustomModal('Commission Calculation', commissionContent);
+                    
+                    document.getElementById('markCompleted').addEventListener('click', async () => {
+                        await this.updateInquiryStatus(inquiryId, 'completed', parseFloat(listingPrice));
+                        this.hideModal('customModal');
+                    });
+                    
+                    document.querySelector('.close-commission').addEventListener('click', () => {
+                        this.hideModal('customModal');
+                    });
+                    
+                } catch (error) {
+                    this.showNotification('Error calculating commission: ' + error.message, 'error');
+                }
+            }
+
+            async updateInquiryStatus(inquiryId, status, finalSalePrice = null) {
+                try {
+                    const updateData = { status };
+                    if (finalSalePrice) {
+                        updateData.finalSalePrice = finalSalePrice;
+                    }
+                    
+                    const data = await this.apiCall(`/admin/inquiries/${inquiryId}`, {
+                        method: 'PATCH',
+                        body: JSON.stringify(updateData)
+                    });
+                    
+                    this.showNotification('Inquiry status updated', 'success');
+                    this.loadAdminInquiries(); // Refresh
+                } catch (error) {
+                    this.showNotification('Error updating status: ' + error.message, 'error');
+                }
+            }
+
+            async loadAdminUsers() {
+                try {
+                    const data = await this.apiCall('/admin/users');
+                    this.renderUsers(data.users);
+                } catch (error) {
+                    document.getElementById('usersContainer').innerHTML = 
+                        '<div class="error-message">Error loading users: ' + error.message + '</div>';
+                }
+            }
+
+            renderUsers(users) {
+                const container = document.getElementById('usersContainer');
+                
+                if (!users || users.length === 0) {
+                    container.innerHTML = '<p>No users found</p>';
+                    return;
+                }
+                
+                container.innerHTML = users.map(user => `
+                    <div class="user-item" data-id="${user._id}">
+                        <div class="user-header">
+                            <div class="user-meta">
+                                <strong>${user.name}</strong>
+                                <span class="user-role">${user.role}</span>
+                                ${user.company ? `<span class="user-company">${user.company}</span>` : ''}
+                            </div>
+                            <div class="user-date">Joined: ${new Date(user.createdAt).toLocaleDateString()}</div>
+                        </div>
+                        <div class="user-details">
+                            <p><strong>Email:</strong> ${user.email}</p>
+                            <p><strong>Phone:</strong> ${user.countryCode} ${user.phone}</p>
+                        </div>
+                        <div class="user-actions">
+                            <button class="btn btn-sm btn-danger delete-user" data-id="${user._id}" ${user._id === this.user.id ? 'disabled' : ''}>
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners for delete buttons
+                container.querySelectorAll('.delete-user').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const userId = btn.getAttribute('data-id');
+                        this.deleteUser(userId);
+                    });
+                });
+            }
+
+            async deleteUser(userId) {
+                if (!confirm('Are you sure you want to delete this user? This will also delete all their listings and inquiries.')) {
+                    return;
+                }
+                
+                try {
+                    await this.apiCall(`/admin/users/${userId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    this.showNotification('User deleted successfully', 'success');
+                    this.loadAdminUsers(); // Refresh the users list
+                } catch (error) {
+                    this.showNotification('Error deleting user: ' + error.message, 'error');
+                }
+            }
+
+            async loadAdminListings() {
+                try {
+                    const data = await this.apiCall('/admin/listings');
+                    this.renderAdminListings(data.listings);
+                } catch (error) {
+                    document.getElementById('listingsAdminContainer').innerHTML = 
+                        '<div class="error-message">Error loading listings: ' + error.message + '</div>';
+                }
+            }
+
+            renderAdminListings(listings) {
+                const container = document.getElementById('listingsAdminContainer');
+                
+                if (!listings || listings.length === 0) {
+                    container.innerHTML = '<p>No listings found</p>';
+                    return;
+                }
+                
+                container.innerHTML = listings.map(listing => `
+                    <div class="listing-admin-item" data-id="${listing._id}">
+                        <div class="listing-admin-header">
+                            <div class="listing-admin-meta">
+                                <strong>${listing.title}</strong>
+                                <span class="listing-price">$${listing.price.toLocaleString()}</span>
+                                <span class="listing-status status-${listing.status}">${listing.status}</span>
+                            </div>
+                            <div class="listing-admin-date">${new Date(listing.createdAt).toLocaleDateString()}</div>
+                        </div>
+                        <div class="listing-details">
+                            <p><strong>Category:</strong> ${listing.category}</p>
+                            <p><strong>Location:</strong> ${listing.location}</p>
+                            <p><strong>Seller:</strong> ${listing.userId.name} (${listing.userId.email})</p>
+                        </div>
+                        <div class="listing-admin-actions">
+                            <button class="btn btn-sm btn-danger delete-listing" data-id="${listing._id}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners for delete buttons
+                container.querySelectorAll('.delete-listing').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const listingId = btn.getAttribute('data-id');
+                        this.deleteListing(listingId);
+                    });
+                });
+            }
+
+            async deleteListing(listingId) {
+                if (!confirm('Are you sure you want to delete this listing? This will also delete all associated inquiries.')) {
+                    return;
+                }
+                
+                try {
+                    await this.apiCall(`/admin/listings/${listingId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    this.showNotification('Listing deleted successfully', 'success');
+                    this.loadAdminListings(); // Refresh the listings list
+                    this.loadListings(); // Refresh main listings
+                    
+                    // Refresh dashboard if open
+                    if (document.getElementById('dashboardModal').style.display === 'flex') {
+                        this.loadDashboard();
+                    }
+                } catch (error) {
+                    this.showNotification('Error deleting listing: ' + error.message, 'error');
+                }
+            }
+
+            async loadAdminCommissions() {
+                try {
+                    const data = await this.apiCall('/admin/inquiries');
+                    const completedInquiries = data.inquiries.filter(inquiry => inquiry.status === 'completed' && inquiry.commissionAmount);
+                    this.renderCommissions(completedInquiries);
+                } catch (error) {
+                    document.getElementById('commissionsContainer').innerHTML = 
+                        '<div class="error-message">Error loading commission data: ' + error.message + '</div>';
+                }
+            }
+
+            renderCommissions(commissions) {
+                const container = document.getElementById('commissionsContainer');
+                
+                if (!commissions || commissions.length === 0) {
+                    container.innerHTML = '<p>No completed sales with commissions yet</p>';
+                    return;
+                }
+                
+                container.innerHTML = commissions.map(commission => `
+                    <div class="commission-item">
+                        <div class="commission-header">
+                            <div class="commission-meta">
+                                <strong>${commission.listingId.title}</strong>
+                                <span class="commission-amount">$${commission.commissionAmount.toLocaleString()}</span>
+                                <span class="inquiry-status status-completed">Completed</span>
+                            </div>
+                            <div class="commission-date">${new Date(commission.completedAt).toLocaleDateString()}</div>
+                        </div>
+                        <div class="inquiry-parties">
+                            <div class="party-info">
+                                <strong>Buyer:</strong> ${commission.buyerId.name}
+                            </div>
+                            <div class="party-info">
+                                <strong>Seller:</strong> ${commission.sellerId.name}
+                            </div>
+                        </div>
+                        <div class="commission-info">
+                            <strong>Sale Details:</strong> Final Price: $${commission.finalSalePrice.toLocaleString()} | Commission: ${(commission.commissionRate * 100)}% ($${commission.commissionAmount.toLocaleString()})
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            async handleSearch() {
+                const query = document.getElementById('globalSearch').value;
+                if (!query.trim()) {
+                    this.loadListings();
+                    return;
+                }
+                
+                try {
+                    const data = await this.apiCall(`/search?q=${encodeURIComponent(query)}`);
+                    this.renderListings(data.listings, 'listingsGrid');
+                    this.showNotification(`Found ${data.listings.length} results for "${query}"`, 'success');
+                } catch (error) {
+                    this.showNotification('Search error: ' + error.message, 'error');
+                }
+            }
+            
+            switchTab(tabId) {
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                document.getElementById(tabId).classList.add('active');
+                
+                // Activate selected tab
+                document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+            }
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.cranevoApp = new CranevoApp();
+        });
+    </script>
+</body>
+</html>
