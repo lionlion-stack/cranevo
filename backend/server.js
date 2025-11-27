@@ -10,6 +10,12 @@ require('dotenv').config();
 
 const app = express();
 
+console.log('=== ENVIRONMENT CHECK ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'Set' : 'NOT SET');
+console.log('PORT:', process.env.PORT);
+
 // Middleware - Updated CORS for production
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
