@@ -2000,7 +2000,9 @@
         // API Configuration
        // For development - uses localhost
 // For production - uses your deployed backend URL
-const API_BASE_URL = ''; // ← CHANGE THIS AFTER DEPLOYMENT
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:5000/api' 
+  : 'https://your-actual-backend-url.railway.app/api'; // ← CHANGE THIS AFTER DEPLOYMENT
 
         // Frontend Application with Real API Calls
         class CranevoApp {
@@ -2137,129 +2139,33 @@ const API_BASE_URL = ''; // ← CHANGE THIS AFTER DEPLOYMENT
                 });
             }
             
-          async apiCall(endpoint, options = {}) {
-    console.log(`🔧 Mock API: ${endpoint}`, options);
-    
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Mock responses for all endpoints
-    switch(endpoint) {
-        case '/login':
-            if (options.method === 'POST') {
-                const body = JSON.parse(options.body);
-                console.log('🔐 Mock login with:', body.email);
-                return {
-                    token: 'mock-jwt-token-' + Date.now(),
-                    user: {
-                        id: 'user-' + Date.now(),
-                        name: body.name || body.email.split('@')[0] || 'Test User',
-                        email: body.email,
-                        role: 'user',
-                        countryCode: '+961',
-                        phone: '71 054 221',
-                        company: ''
+            async apiCall(endpoint, options = {}) {
+                try {
+                    const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers
+                        },
+                        ...options
+                    };
+                    
+                    if (this.token && !endpoint.includes('/login') && !endpoint.includes('/register')) {
+                        config.headers.Authorization = `Bearer ${this.token}`;
                     }
-                };
+                    
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'API request failed');
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error('API call error:', error);
+                    throw error;
+                }
             }
-            throw new Error('Login failed - use POST method');
-            
-        case '/register':
-            if (options.method === 'POST') {
-                const body = JSON.parse(options.body);
-                console.log('👤 Mock register:', body.email);
-                return { 
-                    message: 'Registration successful! Please login.',
-                    user: {
-                        id: 'user-' + Date.now(),
-                        name: body.name,
-                        email: body.email
-                    }
-                };
-            }
-            throw new Error('Registration failed');
-            
-        case '/listings':
-            return {
-                listings: [
-                    {
-                        _id: '1',
-                        title: 'Liebherr 630 EC-H Tower Crane',
-                        price: 185000,
-                        category: 'cranes',
-                        status: 'available',
-                        year: 2019,
-                        capacity: 32,
-                        boomLength: 70,
-                        location: 'Beirut, Lebanon',
-                        description: 'Well-maintained tower crane with low operating hours. Perfect for construction projects.',
-                        images: [],
-                        userId: {
-                            name: 'Construction Co.',
-                            email: 'construction@example.com',
-                            countryCode: '+961',
-                            phone: '71 123 456'
-                        }
-                    },
-                    {
-                        _id: '2',
-                        title: 'Caterpillar 320 Excavator',
-                        price: 125000,
-                        category: 'excavators', 
-                        status: 'available',
-                        year: 2020,
-                        hours: 1500,
-                        capacity: 22,
-                        location: 'Tripoli, Lebanon',
-                        description: 'Modern excavator in excellent condition. Ready for immediate use.',
-                        images: [],
-                        userId: {
-                            name: 'Heavy Equipment Rentals',
-                            email: 'rentals@example.com',
-                            countryCode: '+961',
-                            phone: '71 789 012'
-                        }
-                    }
-                ]
-            };
-            
-        case '/my-listings':
-            return { listings: [] };
-            
-        case '/profile':
-            return { user: this.user || {
-                id: 'default-user',
-                name: 'Test User',
-                email: 'test@example.com',
-                role: 'user',
-                countryCode: '+961',
-                phone: '71 054 221'
-            }};
-            
-        case '/admin/stats':
-            return {
-                stats: {
-                    totalUsers: 15,
-                    totalListings: 8,
-                    totalInquiries: 23,
-                    totalCommission: 12500
-                },
-                recentActivities: [
-                    {
-                        buyerId: { name: 'John Doe' },
-                        listingId: { title: 'Liebherr Crane' },
-                        status: 'pending',
-                        createdAt: new Date().toISOString()
-                    }
-                ]
-            };
-            
-        default:
-            // For any other endpoint, return empty data
-            console.warn(`⚠️ Mock endpoint not defined: ${endpoint}`);
-            return {};
-    }
-}
             
             checkAuthState() {
                 if (this.user && this.token) {
@@ -2361,22 +2267,57 @@ const API_BASE_URL = ''; // ← CHANGE THIS AFTER DEPLOYMENT
             }
             
             async handleAddListing(e) {
-    e.preventDefault();
-    try {
-        if (!this.user) {
-            this.showNotification('Please login to add a listing', 'error');
-            return;
-        }
-        
-        // Mock success - remove this when you have a real backend
-        this.showNotification('Listing submitted successfully! (Mock Demo)', 'success');
-        this.hideModal('addListingModal');
-        this.resetForm('addListingForm');
-        
-    } catch (error) {
-        this.showNotification(error.message, 'error');
-    }
-}
+                e.preventDefault();
+                try {
+                    if (!this.user) {
+                        this.showNotification('Please login to add a listing', 'error');
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    const formElements = document.getElementById('addListingForm').elements;
+                    
+                    formData.append('title', formElements.listingTitle.value);
+                    formData.append('category', formElements.listingCategory.value);
+                    formData.append('price', formElements.listingPrice.value);
+                    formData.append('description', formElements.listingDescription.value);
+                    formData.append('year', formElements.listingYear.value);
+                    formData.append('hours', formElements.listingHours.value || 0);
+                    formData.append('capacity', formElements.listingCapacity.value || 0);
+                    formData.append('boomLength', formElements.listingBoomLength.value || 0);
+                    formData.append('location', formElements.listingLocation.value);
+                    
+                    const imageFiles = document.getElementById('listingImages').files;
+                    for (let i = 0; i < imageFiles.length; i++) {
+                        formData.append('images', imageFiles[i]);
+                    }
+                    
+                    const response = await fetch(`${API_BASE_URL}/listings`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        },
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Failed to create listing');
+                    }
+                    
+                    this.showNotification('Listing added successfully!', 'success');
+                    this.hideModal('addListingModal');
+                    this.resetForm('addListingForm');
+                    this.loadListings();
+                    // Refresh dashboard if open
+                    if (document.getElementById('dashboardModal').style.display === 'flex') {
+                        this.loadDashboard();
+                    }
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                }
+            }
             
             async handleProfileUpdate(e) {
                 e.preventDefault();
