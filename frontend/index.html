@@ -2711,15 +2711,15 @@ async loadAdminDashboard() {
         this.renderRecentActivities(data.recentActivities);
         
         // Load pending listings for the dashboard
-       //  await this.loadPendingListings();
+        await this.loadPendingListings();
         
     } catch (error) {
         this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
     }
 }
 
+
 // Load pending listings for admin approval
-            /*
 async loadPendingListings() {
     try {
         const data = await this.apiCall('/admin/pending-listings');
@@ -2728,7 +2728,6 @@ async loadPendingListings() {
         console.error('Error loading pending listings:', error);
     }
 }
-*/
 
 // NEW: Render pending listings
 renderPendingListings(listings) {
