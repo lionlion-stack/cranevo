@@ -1897,10 +1897,7 @@
                                 <input type="tel" id="profilePhone" class="form-control" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profileCompany">Company (Optional)</label>
-                            <input type="text" id="profileCompany" class="form-control">
-                        </div>
+
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
                 </div>
@@ -1909,92 +1906,103 @@
     </div>
 
     <!-- Admin Modal -->
-    <div class="modal" id="adminModal">
-        <div class="modal-content" style="max-width: 1200px;">
-            <div class="modal-header">
-                <h2><i class="fas fa-cog"></i> Admin Dashboard - Cranevo Management</h2>
-                <button class="close-modal">&times;</button>
+   <div class="modal" id="adminModal">
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-cog"></i> Admin Dashboard - Cranevo Management</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="admin-dashboard">
+            <div class="admin-tabs">
+                <div class="admin-tab active" data-tab="dashboard">Dashboard</div>
+                <div class="admin-tab" data-tab="pending">Pending Listings</div> <!-- ADD THIS LINE -->
+                <div class="admin-tab" data-tab="inquiries">Inquiries</div>
+                <div class="admin-tab" data-tab="users">Users</div>
+                <div class="admin-tab" data-tab="listings">Listings</div>
+                <div class="admin-tab" data-tab="commissions">Commissions</div>
             </div>
-            <div class="admin-dashboard">
-                <div class="admin-tabs">
-                    <div class="admin-tab active" data-tab="dashboard">Dashboard</div>
-                    <div class="admin-tab" data-tab="inquiries">Inquiries</div>
-                    <div class="admin-tab" data-tab="users">Users</div>
-                    <div class="admin-tab" data-tab="listings">Listings</div>
-                    <div class="admin-tab" data-tab="commissions">Commissions</div>
-                </div>
-                
-                <!-- Dashboard Tab -->
-                <div class="admin-tab-content active" id="admin-dashboard">
-                    <div class="admin-stats">
-                        <div class="stat-card">
-                            <h3 id="totalUsers">0</h3>
-                            <p>Total Users</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3 id="totalListings">0</h3>
-                            <p>Total Listings</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3 id="totalInquiries">0</h3>
-                            <p>Total Inquiries</p>
-                        </div>
-                        <div class="stat-card commission">
-                            <h3 id="totalCommission">$0</h3>
-                            <p>Total Commission</p>
-                        </div>
+            
+            <!-- Dashboard Tab -->
+            <div class="admin-tab-content active" id="admin-dashboard">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
                     </div>
-                    
-                    <div class="recent-activities">
-                        <h3>Recent Activities</h3>
-                        <div id="recentActivities">
-                            <div class="loading">Loading activities...</div>
-                        </div>
+                    <div class="stat-card">
+                        <h3 id="totalListings">0</h3>
+                        <p>Total Listings</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalInquiries">0</h3>
+                        <p>Total Inquiries</p>
+                    </div>
+                    <div class="stat-card commission">
+                        <h3 id="totalCommission">$0</h3>
+                        <p>Total Commission</p>
                     </div>
                 </div>
                 
-                <!-- Inquiries Tab -->
-                <div class="admin-tab-content" id="admin-inquiries">
-                    <div class="inquiries-list">
-                        <h3>Manage Inquiries</h3>
-                        <div class="inquiries-container" id="inquiriesContainer">
-                            <div class="loading">Loading inquiries...</div>
-                        </div>
+                <div class="recent-activities">
+                    <h3>Recent Activities</h3>
+                    <div id="recentActivities">
+                        <div class="loading">Loading activities...</div>
                     </div>
                 </div>
-                
-                <!-- Users Tab -->
-                <div class="admin-tab-content" id="admin-users">
-                    <div class="users-list">
-                        <h3>Manage Users</h3>
-                        <div class="users-container" id="usersContainer">
-                            <div class="loading">Loading users...</div>
-                        </div>
+            </div>
+            
+            <!-- NEW: Pending Listings Tab -->
+            <div class="admin-tab-content" id="admin-pending">
+                <div class="pending-listings">
+                    <h3>Pending Listings for Review</h3>
+                    <div class="pending-listings-container" id="pendingListingsContainer">
+                        <div class="loading">Loading pending listings...</div>
                     </div>
                 </div>
-                
-                <!-- Listings Tab -->
-                <div class="admin-tab-content" id="admin-listings">
-                    <div class="listings-admin">
-                        <h3>Manage Listings</h3>
-                        <div class="listings-admin-container" id="listingsAdminContainer">
-                            <div class="loading">Loading listings...</div>
-                        </div>
+            </div>
+            
+            <!-- Inquiries Tab -->
+            <div class="admin-tab-content" id="admin-inquiries">
+                <div class="inquiries-list">
+                    <h3>Manage Inquiries</h3>
+                    <div class="inquiries-container" id="inquiriesContainer">
+                        <div class="loading">Loading inquiries...</div>
                     </div>
                 </div>
-                
-                <!-- Commissions Tab -->
-                <div class="admin-tab-content" id="admin-commissions">
-                    <div class="commissions-list">
-                        <h3>Commission Tracking</h3>
-                        <div class="commissions-container" id="commissionsContainer">
-                            <div class="loading">Loading commission data...</div>
-                        </div>
+            </div>
+            
+            <!-- Users Tab -->
+            <div class="admin-tab-content" id="admin-users">
+                <div class="users-list">
+                    <h3>Manage Users</h3>
+                    <div class="users-container" id="usersContainer">
+                        <div class="loading">Loading users...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Listings Tab -->
+            <div class="admin-tab-content" id="admin-listings">
+                <div class="listings-admin">
+                    <h3>Manage Listings</h3>
+                    <div class="listings-admin-container" id="listingsAdminContainer">
+                        <div class="loading">Loading listings...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Commissions Tab -->
+            <div class="admin-tab-content" id="admin-commissions">
+                <div class="commissions-list">
+                    <h3>Commission Tracking</h3>
+                    <div class="commissions-container" id="commissionsContainer">
+                        <div class="loading">Loading commission data...</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         // API Configuration
@@ -2490,7 +2498,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                                 <p><strong>Name:</strong> ${listing.userId.name}</p>
                                 <p><strong>Email:</strong> ${listing.userId.email}</p>
                                 <p><strong>Phone:</strong> ${listing.userId.countryCode} ${listing.userId.phone}</p>
-                                ${listing.userId.company ? `<p><strong>Company:</strong> ${listing.userId.company}</p>` : ''}
+                               
                             </div>
                         </div>
                     </div>
@@ -2521,73 +2529,72 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 }
 
                 // Show inquiry modal instead of contact modal
-                const inquiryContent = `
-                    <div class="inquiry-modal">
-                        <h3><i class="fas fa-handshake"></i> Submit Inquiry</h3>
-                        <div class="inquiry-info">
-                            <p><strong>Machine:</strong> ${listing.title}</p>
-                            <p><strong>Price:</strong> $${listing.price.toLocaleString()}</p>
-                            <p><strong>Seller:</strong> ${listing.userId.name}</p>
-                            <div class="commission-notice">
-                                <i class="fas fa-info-circle"></i>
-                                <span><strong>Note to Buyer:</strong>  Our team will contact you shortly.</span>
-                            </div>
-                        </div>
-                        <div class="inquiry-form">
-                            <div class="form-group">
-                                <label>Your Message to Us:</label>
-                                <textarea class="form-control" id="inquiryMessage" rows="6" placeholder="Tell us about your interest in this machinery. Include any specific requirements, timeline, or questions..."></textarea>
-                            </div>
-                            <div class="inquiry-process">
-                                <h4><i class="fas fa-sync-alt"></i> How It Works:</h4>
-                                <ol>
-                                    <li>You submit this inquiry</li>
-                                    <li>We contact you within 24 hours</li>
-                                    <li>We negotiate with the seller on your behalf</li>
-                                    <li>You pay the listed price directly to the seller</li>
-                                    <li>The seller pays us a 5% commission for facilitating the sale</li>
-                                    <li>We ensure smooth delivery and handle any issues</li>
-                                </ol>
-                            </div>
-                        </div>
-                        <div class="inquiry-actions">
-                            <button class="btn btn-primary" id="submitInquiry">Submit Inquiry</button>
-                            <button class="btn btn-outline close-inquiry">Cancel</button>
-                        </div>
-                    </div>
-                `;
+                
+  const inquiryContent = `
+    <div class="inquiry-modal">
+      <h3><i class="fas fa-handshake"></i> Submit Inquiry</h3>
+      <div class="inquiry-info">
+        <p><strong>Machine:</strong> ${listing.title}</p>
+        <p><strong>Price:</strong> $${listing.price.toLocaleString()}</p>
+        <p><strong>Seller:</strong> ${listing.userId.name}</p>
+        <div class="commission-notice">
+          <i class="fas fa-info-circle"></i>
+          <span><strong>Note:</strong> Our team will contact you shortly to facilitate the transaction.</span>
+        </div>
+      </div>
+      <div class="inquiry-form">
+        <div class="form-group">
+          <label>Your Message:</label>
+          <textarea class="form-control" id="inquiryMessage" rows="6" placeholder="Tell us about your interest in this machinery. Include any specific requirements, timeline, or questions..."></textarea>
+        </div>
+        <div class="inquiry-process">
+          <h4><i class="fas fa-sync-alt"></i> How It Works:</h4>
+          <ol>
+            <li>You submit this inquiry</li>
+            <li>We contact you within 24 hours</li>
+            <li>We negotiate with the seller on your behalf</li>
+            <li>You pay the listed price directly to the seller</li>
+            <li>We ensure smooth delivery and handle any issues</li>
+          </ol>
+        </div>
+      </div>
+      <div class="inquiry-actions">
+        <button class="btn btn-primary" id="submitInquiry">Submit Inquiry</button>
+        <button class="btn btn-outline close-inquiry">Cancel</button>
+      </div>
+    </div>
+  `;
 
-                this.showCustomModal('Submit Inquiry', inquiryContent);
-
+  this.showCustomModal('Submit Inquiry', inquiryContent);
                 // Handle inquiry submission
-                document.getElementById('submitInquiry').addEventListener('click', async () => {
-                    const message = document.getElementById('inquiryMessage').value.trim();
-                    
-                    if (!message) {
-                        this.showNotification('Please enter your inquiry message', 'error');
-                        return;
-                    }
+                 document.getElementById('submitInquiry').addEventListener('click', async () => {
+    const message = document.getElementById('inquiryMessage').value.trim();
+    
+    if (!message) {
+      this.showNotification('Please enter your inquiry message', 'error');
+      return;
+    }
 
-                    try {
-                        const data = await this.apiCall('/inquiries', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                listingId: listing._id,
-                                message: message
-                            })
-                        });
+    try {
+      const data = await this.apiCall('/inquiries', {
+        method: 'POST',
+        body: JSON.stringify({
+          listingId: listing._id,
+          message: message
+        })
+      });
 
-                        this.showNotification('Inquiry submitted successfully! We will contact you within 24 hours.', 'success');
-                        this.hideModal('customModal');
-                    } catch (error) {
-                        this.showNotification('Error submitting inquiry: ' + error.message, 'error');
-                    }
-                });
+      this.showNotification('Inquiry submitted successfully! We will contact you within 24 hours.', 'success');
+      this.hideModal('customModal');
+    } catch (error) {
+      this.showNotification('Error submitting inquiry: ' + error.message, 'error');
+    }
+  });
 
-                document.querySelector('.close-inquiry').addEventListener('click', () => {
-                    this.hideModal('customModal');
-                });
-            }
+  document.querySelector('.close-inquiry').addEventListener('click', () => {
+    this.hideModal('customModal');
+  });
+}
             
             showCustomModal(title, content) {
                 // Create or update custom modal
@@ -2632,33 +2639,111 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 this.showModal('dashboardModal');
             }
             
-            async loadDashboard() {
-                if (!this.user) return;
-                
-                try {
-                    // Load user info
-                    const profileData = await this.apiCall('/profile');
-                    const user = profileData.user;
-                    
-                    document.getElementById('userName').textContent = user.name;
-                    document.getElementById('userEmail').textContent = user.email;
-                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-                    
-                    // Load profile form
-                    document.getElementById('profileName').value = user.name;
-                    document.getElementById('profileEmail').value = user.email;
-                    document.getElementById('profileCountryCode').value = user.countryCode;
-                    document.getElementById('profilePhone').value = user.phone;
-                    document.getElementById('profileCompany').value = user.company || '';
-                    
-                    // Load user's listings
-                    const myListingsData = await this.apiCall('/my-listings');
-                    this.renderListings(myListingsData.listings, 'myListingsGrid');
-                    
-                } catch (error) {
-                    this.showNotification('Error loading dashboard: ' + error.message, 'error');
-                }
-            }
+          async loadDashboard() {
+    if (!this.user) return;
+    
+    try {
+        // Load user info
+        const profileData = await this.apiCall('/profile');
+        const user = profileData.user;
+        
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+        
+        // Load profile form
+        document.getElementById('profileName').value = user.name;
+        document.getElementById('profileEmail').value = user.email;
+        document.getElementById('profileCountryCode').value = user.countryCode;
+        document.getElementById('profilePhone').value = user.phone;
+        document.getElementById('profileCompany').value = user.company || '';
+        
+        // Load user's listings
+        const myListingsData = await this.apiCall('/my-listings');
+        this.renderListings(myListingsData.listings, 'myListingsGrid');
+        
+    } catch (error) {
+        this.showNotification('Error loading dashboard: ' + error.message, 'error');
+    }
+}
+
+// ========== ADD THE NEW FUNCTIONS RIGHT HERE ==========
+
+// NEW: Load pending listings for admin approval
+async loadPendingListings() {
+  try {
+    const data = await this.apiCall('/admin/pending-listings');
+    this.renderPendingListings(data.listings);
+  } catch (error) {
+    console.error('Error loading pending listings:', error);
+  }
+}
+
+// NEW: Render pending listings
+renderPendingListings(listings) {
+  const container = document.getElementById('pendingListingsContainer');
+  if (!container) return;
+  
+  if (!listings || listings.length === 0) {
+    container.innerHTML = '<p>No pending listings for review</p>';
+    return;
+  }
+  
+  container.innerHTML = listings.map(listing => `
+    <div class="listing-admin-item pending-listing" data-id="${listing._id}">
+      <div class="listing-admin-header">
+        <div class="listing-admin-meta">
+          <strong>${listing.title}</strong>
+          <span class="listing-price">$${listing.price.toLocaleString()}</span>
+          <span class="listing-status status-pending">Pending Review</span>
+        </div>
+        <div class="listing-admin-date">Submitted: ${new Date(listing.createdAt).toLocaleDateString()}</div>
+      </div>
+      <div class="listing-details">
+        <p><strong>Category:</strong> ${listing.category}</p>
+        <p><strong>Location:</strong> ${listing.location}</p>
+        <p><strong>Seller:</strong> ${listing.userId.name} (${listing.userId.email})</p>
+        <p><strong>Description:</strong> ${listing.description}</p>
+      </div>
+      <div class="listing-admin-actions">
+        <button class="btn btn-sm btn-success approve-listing" data-id="${listing._id}">
+          <i class="fas fa-check"></i> Approve
+        </button>
+        <button class="btn btn-sm btn-danger reject-listing" data-id="${listing._id}">
+          <i class="fas fa-times"></i> Reject
+        </button>
+      </div>
+    </div>
+  `).join('');
+  
+  // Add event listeners
+  container.querySelectorAll('.approve-listing').forEach(btn => {
+    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'approved'));
+  });
+  
+  container.querySelectorAll('.reject-listing').forEach(btn => {
+    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'rejected'));
+  });
+}
+
+// NEW: Approve or reject listing
+async approveListing(listingId, status) {
+  try {
+    const data = await this.apiCall(`/admin/listings/${listingId}/approve`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+    
+    this.showNotification(`Listing ${status} successfully`, 'success');
+    this.loadPendingListings();
+    this.loadAdminListings(); // Refresh all listings
+  } catch (error) {
+    this.showNotification('Error updating listing: ' + error.message, 'error');
+  }
+}
+
+// ========== YOUR EXISTING CODE CONTINUES BELOW ==========
+// ... your existing showAdminDashboard, loadAdminDashboard, etc. functions continue here ...
 
             async showAdminDashboard() {
                 if (!this.user) return;
@@ -2672,6 +2757,78 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
             }
 
             async loadAdminDashboard() {
+                // NEW: Load pending listings for admin approval
+async loadPendingListings() {
+  try {
+    const data = await this.apiCall('/admin/pending-listings');
+    this.renderPendingListings(data.listings);
+  } catch (error) {
+    console.error('Error loading pending listings:', error);
+  }
+}
+
+// NEW: Render pending listings
+renderPendingListings(listings) {
+  const container = document.getElementById('pendingListingsContainer');
+  if (!container) return;
+  
+  if (!listings || listings.length === 0) {
+    container.innerHTML = '<p>No pending listings for review</p>';
+    return;
+  }
+  
+  container.innerHTML = listings.map(listing => `
+    <div class="listing-admin-item pending-listing" data-id="${listing._id}">
+      <div class="listing-admin-header">
+        <div class="listing-admin-meta">
+          <strong>${listing.title}</strong>
+          <span class="listing-price">$${listing.price.toLocaleString()}</span>
+          <span class="listing-status status-pending">Pending Review</span>
+        </div>
+        <div class="listing-admin-date">Submitted: ${new Date(listing.createdAt).toLocaleDateString()}</div>
+      </div>
+      <div class="listing-details">
+        <p><strong>Category:</strong> ${listing.category}</p>
+        <p><strong>Location:</strong> ${listing.location}</p>
+        <p><strong>Seller:</strong> ${listing.userId.name} (${listing.userId.email})</p>
+        <p><strong>Description:</strong> ${listing.description}</p>
+      </div>
+      <div class="listing-admin-actions">
+        <button class="btn btn-sm btn-success approve-listing" data-id="${listing._id}">
+          <i class="fas fa-check"></i> Approve
+        </button>
+        <button class="btn btn-sm btn-danger reject-listing" data-id="${listing._id}">
+          <i class="fas fa-times"></i> Reject
+        </button>
+      </div>
+    </div>
+  `).join('');
+  
+  // Add event listeners
+  container.querySelectorAll('.approve-listing').forEach(btn => {
+    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'approved'));
+  });
+  
+  container.querySelectorAll('.reject-listing').forEach(btn => {
+    btn.addEventListener('click', () => this.approveListing(btn.getAttribute('data-id'), 'rejected'));
+  });
+}
+
+// NEW: Approve or reject listing
+async approveListing(listingId, status) {
+  try {
+    const data = await this.apiCall(`/admin/listings/${listingId}/approve`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+    
+    this.showNotification(`Listing ${status} successfully`, 'success');
+    this.loadPendingListings();
+    this.loadAdminListings(); // Refresh all listings
+  } catch (error) {
+    this.showNotification('Error updating listing: ' + error.message, 'error');
+  }
+}
                 try {
                     const data = await this.apiCall('/admin/stats');
                     this.renderAdminStats(data.stats);
@@ -2729,20 +2886,26 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 document.querySelector(`.admin-tab[data-tab="${tabId}"]`).classList.add('active');
 
                 // Load tab-specific data
-                switch(tabId) {
-                    case 'inquiries':
-                        this.loadAdminInquiries();
-                        break;
-                    case 'users':
-                        this.loadAdminUsers();
-                        break;
-                    case 'listings':
-                        this.loadAdminListings();
-                        break;
-                    case 'commissions':
-                        this.loadAdminCommissions();
-                        break;
-                }
+               switch(tabId) {
+    case 'dashboard':
+        this.loadAdminDashboard();
+        break;
+    case 'pending': // ADD THIS NEW CASE
+        this.loadPendingListings();
+        break;
+    case 'inquiries':
+        this.loadAdminInquiries();
+        break;
+    case 'users':
+        this.loadAdminUsers();
+        break;
+    case 'listings':
+        this.loadAdminListings();
+        break;
+    case 'commissions':
+        this.loadAdminCommissions();
+        break;
+}
             }
 
             async loadAdminInquiries() {
