@@ -2298,7 +2298,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
         
         formData.append('title', formElements.listingTitle.value);
         formData.append('category', formElements.listingCategory.value);
-        formData.append('price', formElements.listingPrice.value);
+        
         formData.append('description', formElements.listingDescription.value);
         formData.append('year', formElements.listingYear.value);
         formData.append('hours', formElements.listingHours.value || 0);
@@ -2442,7 +2442,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
                 });
             }
             
-            createListingCard(listing) {
+           createListingCard(listing) {
     const card = document.createElement('div');
     card.className = 'listing-card';
     
@@ -2457,7 +2457,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
         <div class="listing-details">
             <span class="listing-status ${statusClass}">${statusText}</span>
             <h3 class="listing-title">${listing.title}</h3>
-            <div class="listing-price">$${listing.price.toLocaleString()}</div>
+            <!-- REMOVED price display -->
             <div class="listing-specs">
                 ${listing.year ? `<span><i class="fas fa-calendar"></i> ${listing.year}</span>` : ''}
                 ${listing.capacity ? `<span><i class="fas fa-weight-hanging"></i> ${listing.capacity}T</span>` : ''}
@@ -2467,7 +2467,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
             ${listing.status === 'pending' ? '<p class="pending-notice"><i class="fas fa-clock"></i> Waiting for admin approval</p>' : ''}
             <div class="listing-actions">
                 <button class="btn btn-outline view-details" data-id="${listing._id}">View Details</button>
-                ${listing.status === 'approved' ? `<button class="btn btn-primary contact-seller" data-id="${listing._id}">Submit Inquiry</button>` : '<button class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">Pending Approval</button>'}
+                ${listing.status === 'approved' ? `<button class="btn btn-primary contact-seller" data-id="${listing._id}">Contact for Pricing</button>` : '<button class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">Pending Approval</button>'}
             </div>
         </div>
     `;
