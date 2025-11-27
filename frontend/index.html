@@ -2691,8 +2691,7 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
 }
 
 
-// ========== YOUR EXISTING CODE CONTINUES BELOW ==========
-// ... your existing showAdminDashboard, loadAdminDashboard, etc. functions continue here ...
+
 
             async showAdminDashboard() {
                 if (!this.user) return;
@@ -2719,7 +2718,7 @@ async loadAdminDashboard() {
     this.showNotification('Error loading admin dashboard: ' + error.message, 'error');
   }
 }
-
+ 
             // NEW: Load pending listings for admin approval
 async loadPendingListings() {
   try {
