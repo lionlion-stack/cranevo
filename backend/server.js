@@ -57,7 +57,7 @@ const ListingSchema = new mongoose.Schema({
     required: true,
     enum: ['cranes', 'forklifts', 'trucks', 'excavators', 'loaders', 'other']
   },
-  price: { type: Number, required: true },
+  price: { type: Number, default: 0 },
   description: { type: String, required: true },
   year: { type: Number, required: true },
   hours: { type: Number, default: 0 },
@@ -406,7 +406,7 @@ app.post('/api/listings', authMiddleware, upload.array('images', 10), async (req
     const listing = new Listing({
       title,
       category,
-      price: parseFloat(price),
+      price: price ? parseFloat(price) : 0, 
       description,
       year: parseInt(year),
       hours: hours ? parseInt(hours) : 0,
